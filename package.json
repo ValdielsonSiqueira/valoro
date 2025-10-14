@@ -1,0 +1,30 @@
+{
+  "name": "valoro-monorepo",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
+    "storybook": "turbo run storybook",
+    "build-storybook": "turbo run build-storybook",
+    "ui:dev": "pnpm --filter @valoro/ui dev",
+    "ui:build": "pnpm --filter @valoro/ui build",
+    "ui:lint": "pnpm --filter @valoro/ui lint",
+    "docs:dev": "pnpm --filter @valoro/docs storybook",
+    "docs:build": "pnpm --filter @valoro/docs build-storybook",
+    "docs:lint": "pnpm --filter @valoro/docs lint",
+    "app:dev": "pnpm --filter valoro dev",
+    "app:build": "pnpm --filter valoro build",
+    "app:preview": "pnpm --filter valoro preview",
+    "app:lint": "pnpm --filter valoro lint"
+  },
+  "devDependencies": {
+    "@turbo/gen": "^1.10.12",
+    "turbo": "^1.10.12",
+    "typescript": "^5.0.0"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
