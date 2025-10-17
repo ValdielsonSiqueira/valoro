@@ -1,64 +1,69 @@
 import { Button } from './components/button'
+import { ThemeProvider, ThemeToggle } from './index'
 
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-50 p-8">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            🎨 Valoro UI - Teste de Componentes
-          </h1>
-          <p className="text-lg text-gray-600">
-            Teste interativo dos componentes do pacote UI
-          </p>
-        </div>
+    <ThemeProvider>
+      <div className="min-h-screen bg-background text-foreground p-8">
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="flex justify-center items-center gap-4 mb-4">
+              <h1 className="text-4xl font-bold text-foreground">
+                🎨 Valoro UI - Teste de Componentes
+              </h1>
+              <ThemeToggle />
+            </div>
+            <p className="text-lg text-muted-foreground">
+              Teste interativo dos componentes do pacote UI
+            </p>
+          </div>
 
         {/* Button Variants Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
             Variantes do Botão
           </h2>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Default
               </h3>
               <Button>Botão Padrão</Button>
             </div>
             
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Destructive
               </h3>
               <Button variant="destructive">Botão Destrutivo</Button>
             </div>
             
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Outline
               </h3>
               <Button variant="outline">Botão Outline</Button>
             </div>
             
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Secondary
               </h3>
               <Button variant="secondary">Botão Secundário</Button>
             </div>
             
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Ghost
               </h3>
               <Button variant="ghost">Botão Ghost</Button>
             </div>
             
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                 Link
               </h3>
               <Button variant="link">Botão Link</Button>
@@ -67,29 +72,29 @@ function App() {
         </div>
 
         {/* Button Sizes Section */}
-        <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
-          <h2 className="text-2xl font-semibold text-gray-900 mb-6">
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
             Tamanhos do Botão
           </h2>
           
           <div className="flex flex-wrap items-center gap-4">
             <div className="space-y-2">
-              <p className="text-sm text-gray-500">Small</p>
+              <p className="text-sm text-muted-foreground">Small</p>
               <Button size="sm">Small</Button>
             </div>
             
             <div className="space-y-2">
-              <p className="text-sm text-gray-500">Default</p>
+              <p className="text-sm text-muted-foreground">Default</p>
               <Button size="default">Default</Button>
             </div>
             
             <div className="space-y-2">
-              <p className="text-sm text-gray-500">Large</p>
+              <p className="text-sm text-muted-foreground">Large</p>
               <Button size="lg">Large</Button>
             </div>
             
             <div className="space-y-2">
-              <p className="text-sm text-gray-500">Icon</p>
+              <p className="text-sm text-muted-foreground">Icon</p>
               <Button size="icon">🔍</Button>
             </div>
           </div>
@@ -213,6 +218,7 @@ function App() {
         </div>
       </div>
     </div>
+    </ThemeProvider>
   )
 }
 
