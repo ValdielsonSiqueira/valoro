@@ -13,10 +13,11 @@
     "docs:dev": "pnpm --filter @valoro/docs storybook",
     "docs:build": "pnpm --filter @valoro/docs build-storybook",
     "docs:lint": "pnpm --filter @valoro/docs lint",
-    "app:dev": "pnpm --filter valoro dev",
-    "app:build": "pnpm --filter valoro build",
-    "app:preview": "pnpm --filter valoro preview",
-    "app:lint": "pnpm --filter valoro lint"
+    "app:lint": "pnpm --filter valoro lint",
+    "next:dev": "pnpm --filter valoro-next dev",
+    "next:build": "pnpm --filter valoro-next build",
+    "next:start": "pnpm --filter valoro-next start",
+    "next:lint": "pnpm --filter valoro-next lint"
   },
   "devDependencies": {
     "@turbo/gen": "^1.10.12",

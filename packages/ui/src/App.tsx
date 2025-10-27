@@ -1,5 +1,74 @@
-import { Button } from './components/button'
-import { ThemeProvider, ThemeToggle, Input, Avatar, AvatarImage, AvatarFallback, Select, SelectContent, SelectItem, SelectTrigger, SelectValue, Separator, NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuContent, NavigationMenuTrigger, NavigationMenuLink, Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './index'
+import { 
+  Button,
+  ThemeProvider, 
+  ThemeToggle, 
+  Input, 
+  Avatar, 
+  AvatarImage, 
+  AvatarFallback, 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue, 
+  Separator, 
+  Sheet, 
+  SheetContent, 
+  SheetDescription, 
+  SheetHeader, 
+  SheetTitle, 
+  SheetTrigger,
+  Badge,
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Checkbox,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+  Toggle,
+  ToggleGroup,
+  ToggleGroupItem,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+  Label,
+  Skeleton,
+  Breadcrumb,
+  BreadcrumbList,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarProvider
+} from './index'
 
 
 function App() {
@@ -375,192 +444,177 @@ function App() {
           </div>
         </div>
 
-        {/* Navigation Menu Examples Section */}
+        {/* Breadcrumb Examples Section */}
         <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
           <h2 className="text-2xl font-semibold text-card-foreground mb-6">
-            Exemplos de Navigation Menu
+            Exemplos de Breadcrumb
           </h2>
           
-          <div className="space-y-8">
+          <div className="space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-foreground">
-                Menu de Navegação Simples
+                Breadcrumb Simples
               </h3>
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                      Início
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                      Sobre
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                  <NavigationMenuItem>
-                    <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                      Contato
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/">Início</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/produtos">Produtos</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Eletrônicos</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
             </div>
             
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-foreground">
-                Menu com Dropdown
+                Breadcrumb de Dashboard
               </h3>
-              <NavigationMenu>
-                <NavigationMenuList>
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger>Produtos</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <div className="grid gap-3 p-4 w-[400px]">
-                        <div className="row-span-3">
-                          <NavigationMenuLink asChild>
-                            <a
-                              className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
-                              href="/"
-                            >
-                              <div className="mb-2 mt-4 text-lg font-medium">
-                                Novos Produtos
-                              </div>
-                              <p className="text-sm leading-tight text-muted-foreground">
-                                Descubra nossa linha mais recente de produtos inovadores.
-                              </p>
-                            </a>
-                          </NavigationMenuLink>
-                        </div>
-                        <div className="space-y-1">
-                          <NavigationMenuLink asChild>
-                            <a className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="/">
-                              <div className="text-sm font-medium leading-none">Eletrônicos</div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Smartphones, laptops e acessórios.
-                              </p>
-                            </a>
-                          </NavigationMenuLink>
-                          <NavigationMenuLink asChild>
-                            <a className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="/">
-                              <div className="text-sm font-medium leading-none">Roupas</div>
-                              <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                                Moda masculina, feminina e infantil.
-                              </p>
-                            </a>
-                          </NavigationMenuLink>
-                        </div>
-                      </div>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                  
-                  <NavigationMenuItem>
-                    <NavigationMenuTrigger>Serviços</NavigationMenuTrigger>
-                    <NavigationMenuContent>
-                      <div className="grid w-[400px] gap-3 p-4">
-                        <NavigationMenuLink asChild>
-                          <a className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="/">
-                            <div className="text-sm font-medium leading-none">Consultoria</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Ajudamos você a tomar as melhores decisões.
-                            </p>
-                          </a>
-                        </NavigationMenuLink>
-                        <NavigationMenuLink asChild>
-                          <a className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="/">
-                            <div className="text-sm font-medium leading-none">Suporte</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Suporte técnico especializado 24/7.
-                            </p>
-                          </a>
-                        </NavigationMenuLink>
-                        <NavigationMenuLink asChild>
-                          <a className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground" href="/">
-                            <div className="text-sm font-medium leading-none">Treinamento</div>
-                            <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
-                              Cursos e workshops especializados.
-                            </p>
-                          </a>
-                        </NavigationMenuLink>
-                      </div>
-                    </NavigationMenuContent>
-                  </NavigationMenuItem>
-                  
-                  <NavigationMenuItem>
-                    <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                      Blog
-                    </NavigationMenuLink>
-                  </NavigationMenuItem>
-                </NavigationMenuList>
-              </NavigationMenu>
+              <Breadcrumb>
+                <BreadcrumbList>
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/dashboard">Dashboard</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/dashboard/projetos">Projetos</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbLink href="/dashboard/projetos/123">Projeto ABC</BreadcrumbLink>
+                  </BreadcrumbItem>
+                  <BreadcrumbSeparator />
+                  <BreadcrumbItem>
+                    <BreadcrumbPage>Configurações</BreadcrumbPage>
+                  </BreadcrumbItem>
+                </BreadcrumbList>
+              </Breadcrumb>
             </div>
-            
+          </div>
+        </div>
+
+        {/* Drawer Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Drawer
+          </h2>
+          
+          <div className="space-y-6">
             <div className="space-y-4">
               <h3 className="text-lg font-medium text-foreground">
-                Menu de Dashboard
+                Drawer Básico
+              </h3>
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <Button variant="outline">Abrir Drawer</Button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerTitle>Configurações</DrawerTitle>
+                    <DrawerDescription>
+                      Faça alterações nas suas configurações aqui.
+                    </DrawerDescription>
+                  </DrawerHeader>
+                  <div className="grid gap-4 py-4">
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="name" className="text-right">
+                        Nome
+                      </Label>
+                      <Input id="name" value="João Silva" className="col-span-3" />
+                    </div>
+                    <div className="grid grid-cols-4 items-center gap-4">
+                      <Label htmlFor="username" className="text-right">
+                        Username
+                      </Label>
+                      <Input id="username" value="@joaosilva" className="col-span-3" />
+                    </div>
+                  </div>
+                  <DrawerFooter>
+                    <Button>Salvar alterações</Button>
+                  </DrawerFooter>
+                </DrawerContent>
+              </Drawer>
+            </div>
+          </div>
+        </div>
+
+        {/* Dropdown Menu Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Dropdown Menu
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Dropdown Menu Básico
+              </h3>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">Abrir Menu</Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem>Perfil</DropdownMenuItem>
+                  <DropdownMenuItem>Configurações</DropdownMenuItem>
+                  <DropdownMenuItem>Sair</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+        </div>
+
+        {/* Sidebar Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Sidebar
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Sidebar Básico
               </h3>
               <div className="border rounded-lg p-4">
-                <NavigationMenu>
-                  <NavigationMenuList>
-                    <NavigationMenuItem>
-                      <NavigationMenuTrigger>Dashboard</NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <div className="grid w-[300px] gap-2 p-4">
-                          <NavigationMenuLink asChild>
-                            <a className="flex items-center space-x-2 rounded-md p-2 hover:bg-accent" href="/">
-                              <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                              <span className="text-sm">Visão Geral</span>
-                            </a>
-                          </NavigationMenuLink>
-                          <NavigationMenuLink asChild>
-                            <a className="flex items-center space-x-2 rounded-md p-2 hover:bg-accent" href="/">
-                              <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                              <span className="text-sm">Analytics</span>
-                            </a>
-                          </NavigationMenuLink>
-                          <NavigationMenuLink asChild>
-                            <a className="flex items-center space-x-2 rounded-md p-2 hover:bg-accent" href="/">
-                              <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                              <span className="text-sm">Relatórios</span>
-                            </a>
-                          </NavigationMenuLink>
-                        </div>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                    
-                    <NavigationMenuItem>
-                      <NavigationMenuTrigger>Projetos</NavigationMenuTrigger>
-                      <NavigationMenuContent>
-                        <div className="grid w-[300px] gap-2 p-4">
-                          <NavigationMenuLink asChild>
-                            <a className="flex items-center space-x-2 rounded-md p-2 hover:bg-accent" href="/">
-                              <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                              <span className="text-sm">Meus Projetos</span>
-                            </a>
-                          </NavigationMenuLink>
-                          <NavigationMenuLink asChild>
-                            <a className="flex items-center space-x-2 rounded-md p-2 hover:bg-accent" href="/">
-                              <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                              <span className="text-sm">Templates</span>
-                            </a>
-                          </NavigationMenuLink>
-                          <NavigationMenuLink asChild>
-                            <a className="flex items-center space-x-2 rounded-md p-2 hover:bg-accent" href="/">
-                              <div className="w-2 h-2 bg-pink-500 rounded-full"></div>
-                              <span className="text-sm">Arquivos</span>
-                            </a>
-                          </NavigationMenuLink>
-                        </div>
-                      </NavigationMenuContent>
-                    </NavigationMenuItem>
-                    
-                    <NavigationMenuItem>
-                      <NavigationMenuLink className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50">
-                        Configurações
-                      </NavigationMenuLink>
-                    </NavigationMenuItem>
-                  </NavigationMenuList>
-                </NavigationMenu>
+                <SidebarProvider>
+                  <Sidebar>
+                    <SidebarHeader>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 bg-primary rounded"></div>
+                        <span className="font-semibold">Valoro</span>
+                      </div>
+                    </SidebarHeader>
+                    <SidebarContent>
+                      <SidebarMenu>
+                        <SidebarMenuItem>
+                          <SidebarMenuButton>
+                            🏠 Dashboard
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                          <SidebarMenuButton>
+                            📊 Relatórios
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                          <SidebarMenuButton>
+                            👥 Usuários
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                        <SidebarMenuItem>
+                          <SidebarMenuButton>
+                            ⚙️ Configurações
+                          </SidebarMenuButton>
+                        </SidebarMenuItem>
+                      </SidebarMenu>
+                    </SidebarContent>
+                  </Sidebar>
+                </SidebarProvider>
               </div>
             </div>
           </div>
@@ -730,6 +784,426 @@ function App() {
           </div>
         </div>
 
+        {/* Badge Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Badge
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Default
+              </h3>
+              <Badge>Badge Padrão</Badge>
+            </div>
+            
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Secondary
+              </h3>
+              <Badge variant="secondary">Secundário</Badge>
+            </div>
+            
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Destructive
+              </h3>
+              <Badge variant="destructive">Erro</Badge>
+            </div>
+            
+            <div className="space-y-3">
+              <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+                Outline
+              </h3>
+              <Badge variant="outline">Outline</Badge>
+            </div>
+          </div>
+        </div>
+
+        {/* Card Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Card
+          </h2>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Card Simples</CardTitle>
+                <CardDescription>
+                  Este é um exemplo de card básico com header e conteúdo.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Conteúdo do card aqui. Pode incluir qualquer elemento React.
+                </p>
+              </CardContent>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Card com Footer</CardTitle>
+                <CardDescription>
+                  Card que inclui um footer com ações.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-muted-foreground">
+                  Conteúdo principal do card.
+                </p>
+              </CardContent>
+              <CardFooter>
+                <Button size="sm">Ação</Button>
+              </CardFooter>
+            </Card>
+            
+            <Card>
+              <CardHeader>
+                <CardTitle>Card de Estatísticas</CardTitle>
+                <CardDescription>
+                  Exemplo de card para exibir métricas.
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-sm">Vendas</span>
+                    <span className="text-sm font-medium">R$ 12.345</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Clientes</span>
+                    <span className="text-sm font-medium">1.234</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-sm">Taxa de Conversão</span>
+                    <span className="text-sm font-medium">3.2%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Checkbox Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Checkbox
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Checkboxes Básicos
+              </h3>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="terms" />
+                  <Label htmlFor="terms">Aceito os termos e condições</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="newsletter" />
+                  <Label htmlFor="newsletter">Desejo receber newsletter</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="notifications" defaultChecked />
+                  <Label htmlFor="notifications">Receber notificações</Label>
+                </div>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Lista de Tarefas
+              </h3>
+              <div className="space-y-2">
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="task1" defaultChecked />
+                  <Label htmlFor="task1" className="line-through text-muted-foreground">
+                    Configurar projeto
+                  </Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="task2" />
+                  <Label htmlFor="task2">Implementar autenticação</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="task3" />
+                  <Label htmlFor="task3">Criar dashboard</Label>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Checkbox id="task4" />
+                  <Label htmlFor="task4">Testes unitários</Label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Table Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Table
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Tabela de Usuários
+              </h3>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Nome</TableHead>
+                    <TableHead>Email</TableHead>
+                    <TableHead>Status</TableHead>
+                    <TableHead className="text-right">Ações</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell className="font-medium">João Silva</TableCell>
+                    <TableCell>joao@email.com</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">Ativo</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button size="sm" variant="outline">Editar</Button>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">Maria Santos</TableCell>
+                    <TableCell>maria@email.com</TableCell>
+                    <TableCell>
+                      <Badge variant="destructive">Inativo</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button size="sm" variant="outline">Editar</Button>
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell className="font-medium">Pedro Costa</TableCell>
+                    <TableCell>pedro@email.com</TableCell>
+                    <TableCell>
+                      <Badge variant="secondary">Ativo</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Button size="sm" variant="outline">Editar</Button>
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </div>
+          </div>
+        </div>
+
+        {/* Tabs Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Tabs
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Tabs Básicas
+              </h3>
+              <Tabs defaultValue="account" className="w-[400px]">
+                <TabsList>
+                  <TabsTrigger value="account">Conta</TabsTrigger>
+                  <TabsTrigger value="password">Senha</TabsTrigger>
+                  <TabsTrigger value="settings">Configurações</TabsTrigger>
+                </TabsList>
+                <TabsContent value="account">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Informações da Conta</CardTitle>
+                      <CardDescription>
+                        Atualize suas informações pessoais aqui.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div>
+                        <Label htmlFor="name">Nome</Label>
+                        <Input id="name" defaultValue="João Silva" />
+                      </div>
+                      <div>
+                        <Label htmlFor="email">Email</Label>
+                        <Input id="email" defaultValue="joao@email.com" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="password">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Alterar Senha</CardTitle>
+                      <CardDescription>
+                        Mantenha sua conta segura com uma senha forte.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div>
+                        <Label htmlFor="current">Senha Atual</Label>
+                        <Input id="current" type="password" />
+                      </div>
+                      <div>
+                        <Label htmlFor="new">Nova Senha</Label>
+                        <Input id="new" type="password" />
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+                <TabsContent value="settings">
+                  <Card>
+                    <CardHeader>
+                      <CardTitle>Configurações</CardTitle>
+                      <CardDescription>
+                        Gerencie suas preferências de conta.
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-2">
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="notifications" />
+                        <Label htmlFor="notifications">Receber notificações</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Checkbox id="newsletter" />
+                        <Label htmlFor="newsletter">Newsletter</Label>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </TabsContent>
+              </Tabs>
+            </div>
+          </div>
+        </div>
+
+        {/* Toggle Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Toggle
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Toggle Individual
+              </h3>
+              <div className="flex items-center space-x-4">
+                <Toggle aria-label="Toggle bold">
+                  <span className="font-bold">B</span>
+                </Toggle>
+                <Toggle aria-label="Toggle italic">
+                  <span className="italic">I</span>
+                </Toggle>
+                <Toggle aria-label="Toggle underline">
+                  <span className="underline">U</span>
+                </Toggle>
+              </div>
+            </div>
+            
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Toggle Group
+              </h3>
+              <ToggleGroup type="multiple">
+                <ToggleGroupItem value="bold" aria-label="Toggle bold">
+                  <span className="font-bold">B</span>
+                </ToggleGroupItem>
+                <ToggleGroupItem value="italic" aria-label="Toggle italic">
+                  <span className="italic">I</span>
+                </ToggleGroupItem>
+                <ToggleGroupItem value="underline" aria-label="Toggle underline">
+                  <span className="underline">U</span>
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </div>
+          </div>
+        </div>
+
+        {/* Tooltip Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Tooltip
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Tooltips Básicos
+              </h3>
+              <div className="flex items-center space-x-4">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline">Hover me</Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Este é um tooltip básico</p>
+                  </TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline">Informação</Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Mais informações sobre este botão</p>
+                  </TooltipContent>
+                </Tooltip>
+                
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button variant="outline">Ajuda</Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Clique aqui para obter ajuda</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Skeleton Examples Section */}
+        <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-semibold text-card-foreground mb-6">
+            Exemplos de Skeleton
+          </h2>
+          
+          <div className="space-y-6">
+            <div className="space-y-4">
+              <h3 className="text-lg font-medium text-foreground">
+                Estados de Carregamento
+              </h3>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Skeleton className="h-4 w-[250px]" />
+                  <Skeleton className="h-4 w-[200px]" />
+                  <Skeleton className="h-4 w-[150px]" />
+                </div>
+                
+                <div className="flex items-center space-x-4">
+                  <Skeleton className="h-12 w-12 rounded-full" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[200px]" />
+                    <Skeleton className="h-4 w-[160px]" />
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <Skeleton className="h-[125px] w-[250px] rounded-xl" />
+                  <div className="space-y-2">
+                    <Skeleton className="h-4 w-[250px]" />
+                    <Skeleton className="h-4 w-[200px]" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* Interactive Examples Section */}
         <div className="bg-card rounded-lg shadow-sm border p-8 mb-8">
           <h2 className="text-2xl font-semibold text-card-foreground mb-6">
@@ -806,7 +1280,11 @@ function App() {
             <div>
               <h3 className="text-lg font-medium mb-3">Componentes</h3>
               <ul className="space-y-2 text-sm">
-                <li>• Button (6 variantes, 4 tamanhos)</li>
+                <li>• Button, Input, Avatar, Badge</li>
+                <li>• Card, Table, Tabs, Toggle</li>
+                <li>• Checkbox, Tooltip, Skeleton</li>
+                <li>• Navigation Menu, Sheet, Select</li>
+                <li>• Breadcrumb, Separator, Label</li>
                 <li>• Suporte a asChild (Radix UI)</li>
                 <li>• Class Variance Authority</li>
                 <li>• Tailwind CSS + Animate</li>
