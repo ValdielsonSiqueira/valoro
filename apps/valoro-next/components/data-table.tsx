@@ -54,6 +54,7 @@ import { toast } from "sonner"
 import { z } from "zod"
 
 import { useIsMobile } from "@/hooks/use-mobile"
+import { useVisibility } from "@/contexts/visibility-context"
 import { Badge } from "@valoro/ui"
 import { Button } from "@valoro/ui"
 import {
@@ -136,7 +137,10 @@ function DragHandle({ id }: { id: number }) {
   )
 }
 
-const columns: ColumnDef<z.infer<typeof schema>>[] = [
+function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
+  const { isVisible } = useVisibility()
+
+  return [
   {
     id: "drag",
     header: () => null,
@@ -219,7 +223,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           Target
         </Label>
         <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
+          className={`hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent ${!isVisible ? 'blur-sm' : ''}`}
           defaultValue={row.original.target}
           id={`${row.original.id}-target`}
         />
@@ -244,7 +248,7 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
           Limit
         </Label>
         <Input
-          className="hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent"
+          className={`hover:bg-input/30 focus-visible:bg-background dark:hover:bg-input/30 dark:focus-visible:bg-input/30 h-8 w-16 border-transparent bg-transparent text-right shadow-none focus-visible:border dark:bg-transparent ${!isVisible ? 'blur-sm' : ''}`}
           defaultValue={row.original.limit}
           id={`${row.original.id}-limit`}
         />
@@ -309,7 +313,8 @@ const columns: ColumnDef<z.infer<typeof schema>>[] = [
       </DropdownMenu>
     ),
   },
-]
+  ]
+}
 
 function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
   const { transform, transition, setNodeRef, isDragging } = useSortable({
@@ -341,6 +346,7 @@ export function DataTable({
 }: {
   data: z.infer<typeof schema>[]
 }) {
+  const columns = useColumns()
   const [data, setData] = React.useState(() => initialData)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =

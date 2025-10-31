@@ -18,9 +18,9 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
       aria-label="Alternar tema"
     >
       {theme === 'light' ? (
-        <Moon className="h-4 w-4" />
+        <Moon className="h-4 w-4 text-primary" />
       ) : (
-        <Sun className="h-4 w-4" />
+        <Sun className="h-4 w-4 text-primary" />
       )}
     </Button>
   )

@@ -11,15 +11,12 @@ import {
   IconFileWord,
   IconFolder,
   IconHelp,
-  IconInnerShadowTop,
   IconListDetails,
   IconReport,
-  IconSearch,
   IconSettings,
-  IconUsers,
 } from "@tabler/icons-react"
 
-import { NavDocuments } from "@/components/nav-documents"
+import Image from "next/image"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
@@ -31,12 +28,13 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useTheme,
 } from "@valoro/ui"
 
 const data = {
   user: {
-    name: "shadcn",
-    email: "m@example.com",
+    name: "Valdielson",
+    email: "valdielson@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
@@ -46,24 +44,24 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Analytics",
+      title: "Gráficos",
       url: "#",
       icon: IconChartBar,
     },
     {
-      title: "Projects",
+      title: "Transações",
       url: "#",
-      icon: IconFolder,
+      icon: IconListDetails,
     },
     {
-      title: "Team",
+      title: "Investimentos",
       url: "#",
-      icon: IconUsers,
+      icon: IconChartBar,
+    },
+    {
+      title: "Outros Serviços",
+      url: "#",
+      icon: IconFolder,
     },
   ],
   navClouds: [
@@ -116,19 +114,14 @@ const data = {
   ],
   navSecondary: [
     {
-      title: "Settings",
+      title: "Configurações",
       url: "#",
       icon: IconSettings,
     },
     {
-      title: "Get Help",
+      title: "Ajuda",
       url: "#",
       icon: IconHelp,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: IconSearch,
     },
   ],
   documents: [
@@ -151,6 +144,9 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { theme } = useTheme()
+  const logoSrc = theme === 'light' ? '/logo-light.svg' : '/logo-dark.svg'
+
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -158,11 +154,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:!p-6"
             >
               <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
+                <Image src={logoSrc} alt="Valoro" width={45} height={45} />
+                <span className="text-base font-semibold">Valoro</span>
               </a>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -170,7 +166,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
