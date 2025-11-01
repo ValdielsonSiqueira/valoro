@@ -14,6 +14,7 @@ import Image from "next/image"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
+import { ProfileDialog } from "@/components/profile-dialog"
 import {
   Sidebar,
   SidebarContent,
@@ -41,6 +42,7 @@ export function AppSidebar({
   const { theme } = useTheme()
   const logoSrc = theme === 'light' ? '/logo-light.svg' : '/logo-dark.svg'
   const [user, setUser] = React.useState<UserProfile>(() => getUserProfile())
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = React.useState(false)
 
   React.useEffect(() => {
     setUser(getUserProfile())
@@ -49,6 +51,10 @@ export function AppSidebar({
   const handleProfileUpdate = (updatedUser: UserProfile) => {
     setUser(updatedUser)
     window.dispatchEvent(new CustomEvent('userProfileUpdated', { detail: updatedUser }))
+  }
+
+  const handleConfiguracoesClick = () => {
+    setIsProfileDialogOpen(true)
   }
 
   const data = {
@@ -117,11 +123,20 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} onAddTransaction={onAddTransaction} />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary 
+          items={data.navSecondary} 
+          className="mt-auto"
+          onConfiguracoesClick={handleConfiguracoesClick}
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={data.user} onProfileUpdate={handleProfileUpdate} />
       </SidebarFooter>
+      <ProfileDialog
+        open={isProfileDialogOpen}
+        onOpenChange={setIsProfileDialogOpen}
+        onProfileUpdate={handleProfileUpdate}
+      />
     </Sidebar>
   )
 }
