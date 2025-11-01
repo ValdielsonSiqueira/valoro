@@ -44,7 +44,7 @@ export function SiteHeader({ data }: { data?: TransactionData[] }) {
           orientation="vertical"
           className="mx-2 data-[orientation=vertical]:h-4"
         />
-        <h1 className="text-base flex items-center gap-2 font-medium">
+        <h1 className="text-base hidden lg:!flex items-center gap-2 font-medium">
           Olá,
           <span className="text-primary">Valdielson</span>
           <IconMoodDollar className="!size-5 text-primary" /> 
@@ -59,7 +59,7 @@ export function SiteHeader({ data }: { data?: TransactionData[] }) {
             <Button 
               variant="link" 
               size="sm" 
-              className="hidden sm:flex"
+              className="flex"
               onClick={toggleVisibility}
               aria-label={isVisible ? "Ocultar" : "Mostrar"}
             >
@@ -69,7 +69,7 @@ export function SiteHeader({ data }: { data?: TransactionData[] }) {
                 <IconEyeOff className="text-primary !size-6" />
               )}
             </Button>
-            <ThemeToggle className="hidden sm:flex" />
+            <ThemeToggle className="flex" />
             <Button variant="link" asChild size="sm" className="hidden sm:flex">
               <a
                 href="https://github.com/ValdielsonSiqueira/valoro"
