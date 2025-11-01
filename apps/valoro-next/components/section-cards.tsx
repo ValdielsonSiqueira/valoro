@@ -19,11 +19,11 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Total Revenue</CardDescription>
-          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm' : ''}`}>
+          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm select-none' : ''}`}>
             $1,250.00
           </CardTitle>
           <CardAction>
-            <Badge variant="success" className={!isVisible ? 'blur-sm' : ''}>
+            <Badge variant="success" className={!isVisible ? 'blur-sm select-none' : ''}>
               <IconTrendingUp />
               +12.5%
             </Badge>
@@ -41,11 +41,11 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>New Customers</CardDescription>
-          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm' : ''}`}>
+          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm select-none' : ''}`}>
             1,234
           </CardTitle>
           <CardAction>
-            <Badge variant="destructive" className={!isVisible ? 'blur-sm' : ''}>
+            <Badge variant="destructive" className={!isVisible ? 'blur-sm select-none' : ''}>
               <IconTrendingDown />
               -20%
             </Badge>
@@ -63,11 +63,11 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Active Accounts</CardDescription>
-          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm' : ''}`}>
+          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm select-none' : ''}`}>
             45,678
           </CardTitle>
           <CardAction>
-            <Badge variant="success" className={!isVisible ? 'blur-sm' : ''}>
+            <Badge variant="success" className={!isVisible ? 'blur-sm select-none' : ''}>
               <IconTrendingUp />
               +12.5%
             </Badge>
@@ -83,11 +83,11 @@ export function SectionCards() {
       <Card className="@container/card">
         <CardHeader>
           <CardDescription>Growth Rate</CardDescription>
-          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm' : ''}`}>
+          <CardTitle className={`text-2xl font-semibold tabular-nums @[250px]/card:text-3xl ${!isVisible ? 'blur-sm select-none' : ''}`}>
             4.5%
           </CardTitle>
           <CardAction>
-            <Badge variant="success" className={!isVisible ? 'blur-sm' : ''}>
+            <Badge variant="success" className={!isVisible ? 'blur-sm select-none' : ''}>
               <IconTrendingUp />
               +4.5%
             </Badge>

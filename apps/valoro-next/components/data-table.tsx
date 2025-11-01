@@ -196,7 +196,7 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
       </div>
     ),
     cell: ({ row }) => (
-      <div className={`text-left ${!isVisible ? 'blur-sm' : ''}`}>
+      <div className={`text-left ${!isVisible ? 'blur-sm select-none' : ''}`}>
         {formatCurrency(row.original.value)}
       </div>
     ),
@@ -260,7 +260,7 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
       </div>
     ),
     cell: ({ row }) => (
-      <div className={`text-left ${!isVisible ? 'blur-sm' : ''}`}>
+      <div className={`text-left ${!isVisible ? 'blur-sm select-none' : ''}`}>
         {formatCurrency(row.original.effectiveValue)}
       </div>
     ),

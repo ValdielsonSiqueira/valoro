@@ -52,7 +52,7 @@ export function SiteHeader({ data }: { data?: TransactionData[] }) {
         <div className="ml-auto flex items-center gap-2">
             <div className="flex items-center gap-2 text-sm">
               <span className="text-muted-foreground text-lg">Saldo:</span>
-              <span className={`text-primary font-bold text-lg ${!isVisible ? 'blur-sm' : ''}`}>
+              <span className={`text-primary font-bold text-lg ${!isVisible ? 'blur-sm select-none' : ''}`}>
                 {formatCurrency(balance)}
               </span>
             </div>
