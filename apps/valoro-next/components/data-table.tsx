@@ -53,21 +53,11 @@ import {
 } from "@tanstack/react-table"
 import { z } from "zod"
 
-import { useIsMobile } from "@/hooks/use-mobile"
 import { useVisibility } from "@/contexts/visibility-context"
 import { Badge } from "@valoro/ui"
 import { Button } from "@valoro/ui"
 import { Checkbox } from "@valoro/ui"
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@valoro/ui"
+import { TransactionDrawer } from "./transaction-drawer"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -76,7 +66,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@valoro/ui"
-import { Input } from "@valoro/ui"
 import { Label } from "@valoro/ui"
 import {
   Select,
@@ -110,7 +99,6 @@ export const schema = z.object({
   effectiveValue: z.number(), 
 })
 
-// Create a separate component for the drag handle
 function DragHandle({ id }: { id: number }) {
   const { attributes, listeners } = useSortable({
     id,
@@ -451,16 +439,23 @@ export function DataTable({
                     column.getCanHide()
                 )
                 .map((column) => {
+                  const columnLabels: Record<string, string> = {
+                    value: "Valor",
+                    type: "Tipo",
+                    category: "Categoria",
+                    date: "Data",
+                    effectiveValue: "Valor Efetivo",
+                  }
+                  
                   return (
                     <DropdownMenuCheckboxItem
                       key={column.id}
-                      className="capitalize"
                       checked={column.getIsVisible()}
                       onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
                       }
                     >
-                      {column.id}
+                      {columnLabels[column.id] || column.id}
                     </DropdownMenuCheckboxItem>
                   )
                 })}
@@ -626,69 +621,55 @@ export function DataTable({
 
 
 function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
-  const isMobile = useIsMobile()
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
+
+  const parseDate = (dateString: string): Date | undefined => {
+    const parts = dateString.split("/")
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10)
+      const month = parseInt(parts[1], 10) - 1 
+      const year = parseInt(parts[2], 10)
+      return new Date(year, month, day)
+    }
+    return undefined
+  }
+
+  const convertType = (type: "Receita" | "Despesa"): string => {
+    return type.toLowerCase()
+  }
+
+  const handleConcluir = (data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => {
+    console.log("Dados da transação editada:", data)
+  }
 
   return (
-    <Drawer direction={isMobile ? "bottom" : "right"}>
-      <DrawerTrigger asChild>
-        <Button variant="link" className="text-foreground w-fit px-0 text-left">
-          {item.transaction}
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="gap-1">
-          <DrawerTitle>{item.transaction}</DrawerTitle>
-          <DrawerDescription>
-            Detalhes da transação
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="flex flex-col gap-4 overflow-y-auto px-4 text-sm">
-          <form className="flex flex-col gap-4">
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="transaction">Transação</Label>
-              <Input id="transaction" defaultValue={item.transaction} />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="value">Valor</Label>
-                <Input id="value" type="number" defaultValue={item.value.toString()} />
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="effectiveValue">Valor Efetivo</Label>
-                <Input id="effectiveValue" type="number" defaultValue={item.effectiveValue.toString()} />
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="type">Tipo</Label>
-                <Select defaultValue={item.type}>
-                  <SelectTrigger id="type" className="w-full">
-                    <SelectValue placeholder="Select a type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Receita">Receita</SelectItem>
-                    <SelectItem value="Despesa">Despesa</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="flex flex-col gap-3">
-                <Label htmlFor="category">Categoria</Label>
-                <Input id="category" defaultValue={item.category} />
-              </div>
-            </div>
-            <div className="flex flex-col gap-3">
-              <Label htmlFor="date">Data</Label>
-              <Input id="date" defaultValue={item.date} />
-            </div>
-          </form>
-        </div>
-        <DrawerFooter>
-          <Button>Salvar</Button>
-          <DrawerClose asChild>
-            <Button variant="outline">Fechar</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+    <>
+      <Button 
+        variant="link" 
+        className="text-foreground w-fit px-0 text-left"
+        onClick={() => setIsDrawerOpen(true)}
+      >
+        {item.transaction}
+      </Button>
+      <TransactionDrawer
+        open={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        title="Editar Transação"
+        onConcluir={handleConcluir}
+        initialData={{
+          nome: item.transaction,
+          valor: item.value.toString(),
+          tipo: convertType(item.type),
+          categoria: item.category,
+          data: parseDate(item.date),
+        }}
+      />
+    </>
   )
 }

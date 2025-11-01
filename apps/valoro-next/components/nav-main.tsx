@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@valoro/ui"
-import { NewTransactionModal } from "./new-transaction-modal"
+import { TransactionDrawer } from "./transaction-drawer"
 
 export function NavMain({
   items,
@@ -68,9 +68,10 @@ export function NavMain({
               </TooltipContent>
             </Tooltip>
 
-            <NewTransactionModal
+            <TransactionDrawer
               open={isModalOpen}
               onOpenChange={setIsModalOpen}
+              title="Nova Transação"
               onConcluir={handleConcluirTransacao}
             />
           </SidebarMenuItem>
