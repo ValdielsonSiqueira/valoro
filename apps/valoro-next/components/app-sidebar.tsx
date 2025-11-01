@@ -2,17 +2,11 @@
 
 import * as React from "react"
 import {
-  IconCamera,
   IconChartBar,
   IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
   IconFolder,
   IconHelp,
   IconListDetails,
-  IconReport,
   IconSettings,
 } from "@tabler/icons-react"
 
@@ -30,118 +24,7 @@ import {
   SidebarMenuItem,
   useTheme,
 } from "@valoro/ui"
-
-const data = {
-  user: {
-    name: "Valdielson",
-    email: "valdielson@example.com",
-    avatar: "https://github.com/shadcn.png",
-  },
-  navMain: [
-    {
-      title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
-    },
-    {
-      title: "Movimentações",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Transações",
-      url: "#",
-      icon: IconListDetails,
-    },
-    {
-      title: "Investimentos",
-      url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Outros Serviços",
-      url: "#",
-      icon: IconFolder,
-    },
-  ],
-  navClouds: [
-    {
-      title: "Capture",
-      icon: IconCamera,
-      isActive: true,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Proposal",
-      icon: IconFileDescription,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Prompts",
-      icon: IconFileAi,
-      url: "#",
-      items: [
-        {
-          title: "Active Proposals",
-          url: "#",
-        },
-        {
-          title: "Archived",
-          url: "#",
-        },
-      ],
-    },
-  ],
-  navSecondary: [
-    {
-      title: "Configurações",
-      url: "#",
-      icon: IconSettings,
-    },
-    {
-      title: "Ajuda",
-      url: "#",
-      icon: IconHelp,
-    },
-  ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
-}
+import { getUserProfile, UserProfile } from "@/lib/user-service"
 
 export function AppSidebar({ 
   onAddTransaction,
@@ -157,6 +40,63 @@ export function AppSidebar({
 }) {
   const { theme } = useTheme()
   const logoSrc = theme === 'light' ? '/logo-light.svg' : '/logo-dark.svg'
+  const [user, setUser] = React.useState<UserProfile>(() => getUserProfile())
+
+  React.useEffect(() => {
+    setUser(getUserProfile())
+  }, [])
+
+  const handleProfileUpdate = (updatedUser: UserProfile) => {
+    setUser(updatedUser)
+    window.dispatchEvent(new CustomEvent('userProfileUpdated', { detail: updatedUser }))
+  }
+
+  const data = {
+    user: {
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+    },
+    navMain: [
+      {
+        title: "Dashboard",
+        url: "#",
+        icon: IconDashboard,
+      },
+      {
+        title: "Movimentações",
+        url: "#",
+        icon: IconChartBar,
+      },
+      {
+        title: "Transações",
+        url: "#",
+        icon: IconListDetails,
+      },
+      {
+        title: "Investimentos",
+        url: "#",
+        icon: IconChartBar,
+      },
+      {
+        title: "Outros Serviços",
+        url: "#",
+        icon: IconFolder,
+      },
+    ],
+    navSecondary: [
+      {
+        title: "Configurações",
+        url: "#",
+        icon: IconSettings,
+      },
+      {
+        title: "Ajuda",
+        url: "#",
+        icon: IconHelp,
+      },
+    ],
+  }
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -180,7 +120,7 @@ export function AppSidebar({
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={data.user} onProfileUpdate={handleProfileUpdate} />
       </SidebarFooter>
     </Sidebar>
   )

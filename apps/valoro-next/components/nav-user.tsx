@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import {
   IconDotsVertical,
@@ -27,21 +28,32 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@valoro/ui"
+import { ProfileDialog } from "./profile-dialog"
+import { UserProfile } from "@/lib/user-service"
 
 export function NavUser({
   user,
+  onProfileUpdate,
 }: {
   user: {
     name: string
     email: string
     avatar: string
   }
+  onProfileUpdate?: (user: UserProfile) => void
 }) {
   const { isMobile } = useSidebar()
   const router = useRouter()
+  const [isProfileDialogOpen, setIsProfileDialogOpen] = useState(false)
 
   const handleLogout = () => {
     router.push("/")
+  }
+
+  const handleProfileUpdate = (updatedUser: UserProfile) => {
+    if (onProfileUpdate) {
+      onProfileUpdate(updatedUser)
+    }
   }
 
   return (
@@ -106,7 +118,7 @@ export function NavUser({
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setIsProfileDialogOpen(true)}>
                 <IconUserCircle />
                 Conta
               </DropdownMenuItem>
@@ -118,6 +130,11 @@ export function NavUser({
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+        <ProfileDialog
+          open={isProfileDialogOpen}
+          onOpenChange={setIsProfileDialogOpen}
+          onProfileUpdate={handleProfileUpdate}
+        />
       </SidebarMenuItem>
     </SidebarMenu>
   )
