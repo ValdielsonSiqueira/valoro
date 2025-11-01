@@ -1,9 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { IconCirclePlusFilled, IconCashBanknotePlus , type Icon } from "@tabler/icons-react"
 
-import { Button } from "@valoro/ui"
 import {
+  Button,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
@@ -13,6 +14,7 @@ import {
   TooltipTrigger,
   TooltipContent,
 } from "@valoro/ui"
+import { NewTransactionModal } from "./new-transaction-modal"
 
 export function NavMain({
   items,
@@ -23,6 +25,19 @@ export function NavMain({
     icon?: Icon
   }[]
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleConcluirTransacao = (data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => {
+    // Aqui você pode adicionar a lógica para salvar a transação
+    console.log("Dados da transação:", data)
+  }
+
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
@@ -36,23 +51,28 @@ export function NavMain({
               <span>Inicio</span>
             </SidebarMenuButton>
 
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="icon"
+                  className="size-8 group-data-[collapsible=icon]:opacity-0"
+                  variant="outline"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  <IconCashBanknotePlus  className="!size-5" />
+                  <span className="sr-only">Transações</span>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Nova transação</p>
+              </TooltipContent>
+            </Tooltip>
 
-          <Tooltip>
-            <TooltipTrigger asChild>
-             <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-              
-            >
-              <IconCashBanknotePlus  className="!size-5" />
-              <span className="sr-only">Transações</span>
-            </Button>
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>Nova transação</p>
-            </TooltipContent>
-          </Tooltip>
+            <NewTransactionModal
+              open={isModalOpen}
+              onOpenChange={setIsModalOpen}
+              onConcluir={handleConcluirTransacao}
+            />
           </SidebarMenuItem>
         </SidebarMenu>
         <SidebarMenu>

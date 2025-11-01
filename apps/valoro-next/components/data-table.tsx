@@ -173,8 +173,8 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
     enableHiding: false,
   },
   {
-    accessorKey: "header",
-    header: "Header",
+    accessorKey: "transaction",
+    header: "Transações",
     cell: ({ row }) => {
       return <TableCellViewer item={row.original} />
     },
@@ -182,7 +182,7 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
   },
   {
     accessorKey: "type",
-    header: "Section Type",
+    header: "Tipo",
     cell: ({ row }) => (
       <div className="w-32">
         <Badge variant="outline" className="text-muted-foreground px-1.5">
@@ -192,8 +192,8 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
     ),
   },
   {
-    accessorKey: "status",
-    header: "Status",
+    accessorKey: "category",
+    header: "Categoria",
     cell: ({ row }) => (
       <Badge variant="outline" className="text-muted-foreground px-1.5">
         {row.original.status === "Done" ? (
