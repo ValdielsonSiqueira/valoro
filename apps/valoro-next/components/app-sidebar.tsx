@@ -15,6 +15,7 @@ import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
 import { ProfileDialog } from "@/components/profile-dialog"
+import { HelpDialog } from "@/components/help-dialog"
 import {
   Sidebar,
   SidebarContent,
@@ -43,6 +44,7 @@ export function AppSidebar({
   const logoSrc = theme === 'light' ? '/logo-light.svg' : '/logo-dark.svg'
   const [user, setUser] = React.useState<UserProfile>(() => getUserProfile())
   const [isProfileDialogOpen, setIsProfileDialogOpen] = React.useState(false)
+  const [isHelpDialogOpen, setIsHelpDialogOpen] = React.useState(false)
 
   React.useEffect(() => {
     setUser(getUserProfile())
@@ -55,6 +57,10 @@ export function AppSidebar({
 
   const handleConfiguracoesClick = () => {
     setIsProfileDialogOpen(true)
+  }
+
+  const handleAjudaClick = () => {
+    setIsHelpDialogOpen(true)
   }
 
   const data = {
@@ -127,6 +133,7 @@ export function AppSidebar({
           items={data.navSecondary} 
           className="mt-auto"
           onConfiguracoesClick={handleConfiguracoesClick}
+          onAjudaClick={handleAjudaClick}
         />
       </SidebarContent>
       <SidebarFooter>
@@ -136,6 +143,10 @@ export function AppSidebar({
         open={isProfileDialogOpen}
         onOpenChange={setIsProfileDialogOpen}
         onProfileUpdate={handleProfileUpdate}
+      />
+      <HelpDialog
+        open={isHelpDialogOpen}
+        onOpenChange={setIsHelpDialogOpen}
       />
     </Sidebar>
   )

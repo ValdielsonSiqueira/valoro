@@ -14,6 +14,7 @@ import {
 export function NavSecondary({
   items,
   onConfiguracoesClick,
+  onAjudaClick,
   ...props
 }: {
   items: {
@@ -22,6 +23,7 @@ export function NavSecondary({
     icon: Icon
   }[]
   onConfiguracoesClick?: () => void
+  onAjudaClick?: () => void
 } & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
   return (
     <SidebarGroup {...props}>
@@ -33,13 +35,21 @@ export function NavSecondary({
                 e.preventDefault()
                 onConfiguracoesClick()
               }
+              if (item.title === "Ajuda" && onAjudaClick) {
+                e.preventDefault()
+                onAjudaClick()
+              }
             }
+
+            const shouldPreventDefault = 
+              (item.title === "Configurações" && onConfiguracoesClick) ||
+              (item.title === "Ajuda" && onAjudaClick)
 
             return (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton 
-                  asChild={item.title !== "Configurações" || !onConfiguracoesClick}
-                  onClick={item.title === "Configurações" && onConfiguracoesClick ? handleClick : undefined}
+                  asChild={!shouldPreventDefault}
+                  onClick={shouldPreventDefault ? handleClick : undefined}
                 >
                   <a href={item.url} onClick={handleClick} className="flex items-center gap-2">
                     <item.icon />
