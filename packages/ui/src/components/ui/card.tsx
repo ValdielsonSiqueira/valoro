@@ -81,6 +81,54 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
   )
 }
 
+interface CardEmptyProps extends React.ComponentProps<"div"> {
+  icon?: React.ReactNode
+  title?: string
+  description?: string
+  action?: React.ReactNode
+}
+
+function CardEmpty({ 
+  className, 
+  icon, 
+  title = "Nenhum dado disponível",
+  description,
+  action,
+  ...props 
+}: CardEmptyProps) {
+  return (
+    <div
+      data-slot="card-empty"
+      className={cn(
+        "flex flex-col items-center justify-center gap-4 py-12 px-6 text-center",
+        className
+      )}
+      {...props}
+    >
+      {icon && (
+        <div className="text-muted-foreground flex items-center justify-center">
+          {icon}
+        </div>
+      )}
+      {title && (
+        <div className="text-card-foreground text-base font-semibold">
+          {title}
+        </div>
+      )}
+      {description && (
+        <div className="text-muted-foreground text-sm max-w-sm">
+          {description}
+        </div>
+      )}
+      {action && (
+        <div className="mt-2">
+          {action}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export {
   Card,
   CardHeader,
@@ -89,4 +137,5 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  CardEmpty,
 }

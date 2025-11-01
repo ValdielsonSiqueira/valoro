@@ -41,6 +41,7 @@ export {
   CardAction,
   CardDescription,
   CardContent,
+  CardEmpty,
 } from "./components/ui/card"
 
 // Chart
