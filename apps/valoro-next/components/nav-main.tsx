@@ -85,10 +85,10 @@ export function NavMain({
                   top: 0,
                   behavior: "smooth",
                 })
-              } else if (item.title === "Gráficos") {
-                const graficosElement = document.getElementById("graficos")
-                if (graficosElement) {
-                  graficosElement.scrollIntoView({
+              } else if (item.title === "Movimentações") {
+                const MovimentaçõesElement = document.getElementById("Movimentações")
+                if (MovimentaçõesElement) {
+                  MovimentaçõesElement.scrollIntoView({
                     behavior: "smooth",
                     block: "start",
                   })

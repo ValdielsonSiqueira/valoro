@@ -44,7 +44,7 @@ const data = {
       icon: IconDashboard,
     },
     {
-      title: "Gráficos",
+      title: "Movimentações",
       url: "#",
       icon: IconChartBar,
     },

@@ -63,7 +63,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@valoro/ui"
 import { Label } from "@valoro/ui"
@@ -270,26 +269,8 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
   },
   {
     id: "actions",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button
-            variant="ghost"
-            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
-            size="icon"
-          >
-            <IconDotsVertical />
-            <span className="sr-only">Open menu</span>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem>Edit</DropdownMenuItem>
-          <DropdownMenuItem>Make a copy</DropdownMenuItem>
-          <DropdownMenuItem>Favorite</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive">Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    cell: ({ row }) => (
+      <TableCellActions item={row.original} />
     ),
   },
   ]
@@ -395,21 +376,7 @@ export function DataTable({
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
-        <Select defaultValue="outline">
-          <SelectTrigger
-            className="flex w-fit @4xl/main:hidden"
-            size="sm"
-            id="view-selector"
-          >
-            <SelectValue placeholder="Select a view" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="outline">Outline</SelectItem>
-            <SelectItem value="past-performance">Past Performance</SelectItem>
-            <SelectItem value="key-personnel">Key Personnel</SelectItem>
-            <SelectItem value="focus-documents">Focus Documents</SelectItem>
-          </SelectContent>
-        </Select>
+        <span className="text-lg font-bold">Listagem de Transações</span>
         <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
           <TabsTrigger value="outline">Outline</TabsTrigger>
           <TabsTrigger value="past-performance">
@@ -425,19 +392,17 @@ export function DataTable({
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <IconLayoutColumns />
-                <span className="hidden lg:inline">Customize Columns</span>
-                <span className="lg:hidden">Columns</span>
+                <span>Colunas</span>
                 <IconChevronDown />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               {table
                 .getAllColumns()
-                .filter(
-                  (column) =>
-                    typeof column.accessorFn !== "undefined" &&
-                    column.getCanHide()
-                )
+                .filter((column) => {
+                  const excludedColumns = ["drag", "select", "transaction", "actions"]
+                  return column.getCanHide() && !excludedColumns.includes(column.id)
+                })
                 .map((column) => {
                   const columnLabels: Record<string, string> = {
                     value: "Valor",
@@ -620,33 +585,34 @@ export function DataTable({
 }
 
 
+function parseDate(dateString: string): Date | undefined {
+  const parts = dateString.split("/")
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10)
+    const month = parseInt(parts[1], 10) - 1 
+    const year = parseInt(parts[2], 10)
+    return new Date(year, month, day)
+  }
+  return undefined
+}
+
+function convertType(type: "Receita" | "Despesa"): string {
+  return type.toLowerCase()
+}
+
+function handleConcluir(data: {
+  nome: string
+  valor: string
+  tipo: string
+  categoria: string
+  data: Date | undefined
+}) {
+  // Aqui você pode adicionar a lógica para salvar a transação editada
+  console.log("Dados da transação editada:", data)
+}
+
 function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
-
-  const parseDate = (dateString: string): Date | undefined => {
-    const parts = dateString.split("/")
-    if (parts.length === 3) {
-      const day = parseInt(parts[0], 10)
-      const month = parseInt(parts[1], 10) - 1 
-      const year = parseInt(parts[2], 10)
-      return new Date(year, month, day)
-    }
-    return undefined
-  }
-
-  const convertType = (type: "Receita" | "Despesa"): string => {
-    return type.toLowerCase()
-  }
-
-  const handleConcluir = (data: {
-    nome: string
-    valor: string
-    tipo: string
-    categoria: string
-    data: Date | undefined
-  }) => {
-    console.log("Dados da transação editada:", data)
-  }
 
   return (
     <>
@@ -657,6 +623,46 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
       >
         {item.transaction}
       </Button>
+      <TransactionDrawer
+        open={isDrawerOpen}
+        onOpenChange={setIsDrawerOpen}
+        title="Editar Transação"
+        onConcluir={handleConcluir}
+        initialData={{
+          nome: item.transaction,
+          valor: item.value.toString(),
+          tipo: convertType(item.type),
+          categoria: item.category,
+          data: parseDate(item.date),
+        }}
+      />
+    </>
+  )
+}
+
+function TableCellActions({ item }: { item: z.infer<typeof schema> }) {
+  const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
+
+  return (
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
+            size="icon"
+          >
+            <IconDotsVertical />
+            <span className="sr-only">Open menu</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-32">
+          <DropdownMenuItem onClick={() => setIsDrawerOpen(true)}>
+            Editar
+          </DropdownMenuItem>
+          <DropdownMenuItem variant="destructive">Deletar</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
       <TransactionDrawer
         open={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}
