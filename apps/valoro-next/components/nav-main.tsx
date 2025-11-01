@@ -1,18 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { IconCirclePlusFilled, IconCashBanknotePlus , type Icon } from "@tabler/icons-react"
+import { IconCirclePlusFilled, type Icon } from "@tabler/icons-react"
 
 import {
-  Button,
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  Tooltip,
-  TooltipTrigger,
-  TooltipContent,
 } from "@valoro/ui"
 import { TransactionDrawer } from "./transaction-drawer"
 
@@ -34,46 +30,43 @@ export function NavMain({
   }) => void
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [activeItem, setActiveItem] = useState<string | null>(null)
+
+  const handleNovaTransacao = () => {
+    setIsModalOpen(true)
+    setActiveItem("Nova Transação")
+  }
 
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
+          <SidebarMenuItem>
             <SidebarMenuButton
-              tooltip="Inicio"
+              tooltip="Nova Transação"
+              isActive={activeItem === "Nova Transação"}
+              onClick={handleNovaTransacao}
               className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
             >
               <IconCirclePlusFilled />
-              <span>Inicio</span>
+              <span>Nova Transação</span>
             </SidebarMenuButton>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  size="icon"
-                  className="size-8 group-data-[collapsible=icon]:opacity-0"
-                  variant="outline"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  <IconCashBanknotePlus  className="!size-5" />
-                  <span className="sr-only">Transações</span>
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Nova transação</p>
-              </TooltipContent>
-            </Tooltip>
 
             <TransactionDrawer
               open={isModalOpen}
-              onOpenChange={setIsModalOpen}
+              onOpenChange={(open) => {
+                setIsModalOpen(open)
+                if (!open) {
+                  setActiveItem(null)
+                }
+              }}
               title="Nova Transação"
               onConcluir={(data) => {
                 if (onAddTransaction) {
                   onAddTransaction(data)
                 }
                 setIsModalOpen(false)
+                setActiveItem(null)
               }}
             />
           </SidebarMenuItem>
@@ -81,8 +74,9 @@ export function NavMain({
         <SidebarMenu>
           {items.map((item) => {
             const handleClick = () => {
+              setActiveItem(item.title)
+              
               if (item.title === "Dashboard") {
-                // Scroll até o topo da página
                 window.scrollTo({
                   top: 0,
                   behavior: "smooth",
@@ -110,6 +104,7 @@ export function NavMain({
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton 
                   tooltip={item.title}
+                  isActive={activeItem === item.title}
                   onClick={handleClick}
                 >
                   {item.icon && <item.icon />}
