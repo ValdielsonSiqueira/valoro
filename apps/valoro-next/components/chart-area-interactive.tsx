@@ -4,6 +4,7 @@ import * as React from "react"
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
 
 import { useIsMobile } from "@/hooks/use-mobile"
+import { useVisibility } from "@/contexts/visibility-context"
 import {
   Card,
   CardAction,
@@ -104,6 +105,7 @@ export function ChartAreaInteractive({
   data?: TransactionData[]
 }) {
   const isMobile = useIsMobile()
+  const { isVisible } = useVisibility()
   const [timeRange, setTimeRange] = React.useState("90d")
 
   React.useEffect(() => {
@@ -191,7 +193,7 @@ export function ChartAreaInteractive({
         ) : (
           <ChartContainer
             config={chartConfig}
-            className="aspect-auto h-[250px] w-full"
+            className={`aspect-auto h-[250px] w-full ${!isVisible ? 'blur-sm select-none' : ''}`}
           >
             <AreaChart data={filteredData}>
               <defs>
@@ -238,16 +240,18 @@ export function ChartAreaInteractive({
               <ChartTooltip
                 cursor={false}
                 content={
-                  <ChartTooltipContent
-                    labelFormatter={(value) => {
-                      return new Date(value).toLocaleDateString("pt-BR", {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                      })
-                    }}
-                    indicator="dot"
-                  />
+                  !isVisible ? null : (
+                    <ChartTooltipContent
+                      labelFormatter={(value) => {
+                        return new Date(value).toLocaleDateString("pt-BR", {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                        })
+                      }}
+                      indicator="dot"
+                    />
+                  )
                 }
               />
               <Area
