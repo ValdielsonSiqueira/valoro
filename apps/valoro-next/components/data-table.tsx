@@ -84,8 +84,6 @@ import {
 import {
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
 } from "@valoro/ui"
 
 export const schema = z.object({
@@ -308,6 +306,7 @@ export function DataTable({
 }) {
   const columns = useColumns()
   const [data, setData] = React.useState(() => initialData)
+  const [isNewTransactionDrawerOpen, setIsNewTransactionDrawerOpen] = React.useState(false)
   const [rowSelection, setRowSelection] = React.useState({})
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({})
@@ -376,23 +375,14 @@ export function DataTable({
         <Label htmlFor="view-selector" className="sr-only">
           View
         </Label>
-        <span className="text-lg font-bold">Listagem de Transações</span>
-        <TabsList className="**:data-[slot=badge]:bg-muted-foreground/30 hidden **:data-[slot=badge]:size-5 **:data-[slot=badge]:rounded-full **:data-[slot=badge]:px-1 @4xl/main:flex">
-          <TabsTrigger value="outline">Outline</TabsTrigger>
-          <TabsTrigger value="past-performance">
-            Past Performance <Badge variant="secondary">3</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="key-personnel">
-            Key Personnel <Badge variant="secondary">2</Badge>
-          </TabsTrigger>
-          <TabsTrigger value="focus-documents">Focus Documents</TabsTrigger>
-        </TabsList>
+        <span className="text-lg font-bold hidden lg:!block">Transações</span>
+        <div className="text-lg font-bold lg:!hidden" />
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" size="sm">
                 <IconLayoutColumns />
-                <span>Colunas</span>
+                <span className="hidden lg:!block">Colunas</span>
                 <IconChevronDown />
               </Button>
             </DropdownMenuTrigger>
@@ -426,10 +416,21 @@ export function DataTable({
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant="outline" size="sm">
-            <IconPlus />
-            <span className="hidden lg:inline">Add Section</span>
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="items-center gap-2"
+            onClick={() => setIsNewTransactionDrawerOpen(true)}
+          >
+            <IconPlus className="flex-shrink-0" />
+             <span className="hidden lg:!block">Nova Transação</span>
           </Button>
+          <TransactionDrawer
+            open={isNewTransactionDrawerOpen}
+            onOpenChange={setIsNewTransactionDrawerOpen}
+            title="Nova Transação"
+            onConcluir={handleConcluirNovaTransacao}
+          />
         </div>
       </div>
       <TabsContent
@@ -607,8 +608,17 @@ function handleConcluir(data: {
   categoria: string
   data: Date | undefined
 }) {
-  // Aqui você pode adicionar a lógica para salvar a transação editada
   console.log("Dados da transação editada:", data)
+}
+
+function handleConcluirNovaTransacao(data: {
+  nome: string
+  valor: string
+  tipo: string
+  categoria: string
+  data: Date | undefined
+}) {
+  console.log("Dados da nova transação:", data)
 }
 
 function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
