@@ -78,15 +78,23 @@ export function TransactionDrawer({
     return type.toLowerCase()
   }
   
-  const [nome, setNome] = useState<string>(initialData?.nome || "")
-  const [valor, setValor] = useState<string>(initialData?.valor || "")
-  const [tipo, setTipo] = useState<string>(normalizeType(initialData?.tipo))
-  const [categoria, setCategoria] = useState<string>(initialData?.categoria || "")
-  const [data, setData] = useState<Date | undefined>(initialData?.data)
+  const [nome, setNome] = useState<string>("")
+  const [valor, setValor] = useState<string>("")
+  const [tipo, setTipo] = useState<string>("")
+  const [categoria, setCategoria] = useState<string>("")
+  const [data, setData] = useState<Date | undefined>(undefined)
   const [errors, setErrors] = useState<Partial<Record<keyof TransactionFormData, string>>>({})
   const [touched, setTouched] = useState<Partial<Record<keyof TransactionFormData, boolean>>>({})
-
+  
+  const [mounted, setMounted] = useState(false)
+  
   useEffect(() => {
+    setMounted(true)
+  }, [])
+  
+  useEffect(() => {
+    if (!mounted) return
+    
     if (initialData) {
       setNome(initialData.nome || "")
       setValor(initialData.valor || "")
@@ -95,11 +103,7 @@ export function TransactionDrawer({
       setData(initialData.data)
       setErrors({})
       setTouched({})
-    }
-  }, [initialData])
-
-  useEffect(() => {
-    if (open && title === "Nova Transação" && !initialData) {
+    } else if (open && title === "Nova Transação") {
       setNome("")
       setValor("")
       setTipo("")
@@ -108,7 +112,7 @@ export function TransactionDrawer({
       setErrors({})
       setTouched({})
     }
-  }, [open, title, initialData])
+  }, [initialData, mounted, open, title])
 
   const validateForm = (): boolean => {
     const fieldErrors: Partial<Record<keyof TransactionFormData, string>> = {}

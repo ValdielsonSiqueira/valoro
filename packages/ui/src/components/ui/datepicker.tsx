@@ -27,8 +27,19 @@ export function DatePicker({
   buttonClassName,
 }: DatePickerProps) {
   const [open, setOpen] = React.useState(false)
+  const [mounted, setMounted] = React.useState(false)
+
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const formatDate = (date: Date) => {
+    if (!mounted) {
+      const day = String(date.getDate()).padStart(2, "0")
+      const month = String(date.getMonth() + 1).padStart(2, "0")
+      const year = date.getFullYear()
+      return `${day}/${month}/${year}`
+    }
     return date.toLocaleDateString("pt-BR", {
       day: "2-digit",
       month: "long",
