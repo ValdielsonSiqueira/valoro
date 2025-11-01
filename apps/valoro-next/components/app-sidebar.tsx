@@ -143,7 +143,18 @@ const data = {
   ],
 }
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({ 
+  onAddTransaction,
+  ...props 
+}: React.ComponentProps<typeof Sidebar> & {
+  onAddTransaction?: (data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => void
+}) {
   const { theme } = useTheme()
   const logoSrc = theme === 'light' ? '/logo-light.svg' : '/logo-dark.svg'
 
@@ -165,7 +176,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <NavMain items={data.navMain} />
+        <NavMain items={data.navMain} onAddTransaction={onAddTransaction} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

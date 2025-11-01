@@ -18,25 +18,22 @@ import { TransactionDrawer } from "./transaction-drawer"
 
 export function NavMain({
   items,
+  onAddTransaction,
 }: {
   items: {
     title: string
     url: string
     icon?: Icon
   }[]
-}) {
-  const [isModalOpen, setIsModalOpen] = useState(false)
-
-  const handleConcluirTransacao = (data: {
+  onAddTransaction?: (data: {
     nome: string
     valor: string
     tipo: string
     categoria: string
     data: Date | undefined
-  }) => {
-    // Aqui você pode adicionar a lógica para salvar a transação
-    console.log("Dados da transação:", data)
-  }
+  }) => void
+}) {
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <SidebarGroup>
@@ -72,7 +69,12 @@ export function NavMain({
               open={isModalOpen}
               onOpenChange={setIsModalOpen}
               title="Nova Transação"
-              onConcluir={handleConcluirTransacao}
+              onConcluir={(data) => {
+                if (onAddTransaction) {
+                  onAddTransaction(data)
+                }
+                setIsModalOpen(false)
+              }}
             />
           </SidebarMenuItem>
         </SidebarMenu>

@@ -139,7 +139,16 @@ const getCategoryBadgeVariant = (category: string) => {
   return categoryColors[category] || "outline"
 }
 
-function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
+function useColumns(
+  onEdit: (item: z.infer<typeof schema>, data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => void,
+  onDelete: (item: z.infer<typeof schema>) => void
+): ColumnDef<z.infer<typeof schema>>[] {
   const { isVisible } = useVisibility()
 
   return [
@@ -183,7 +192,12 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
       </div>
     ),
     cell: ({ row }) => {
-      return <TableCellViewer item={row.original} />
+      return (
+        <TableCellViewer 
+          item={row.original}
+          onEdit={(data) => onEdit(row.original, data)}
+        />
+      )
     },
     enableHiding: false,
   },
@@ -268,7 +282,11 @@ function useColumns(): ColumnDef<z.infer<typeof schema>>[] {
   {
     id: "actions",
     cell: ({ row }) => (
-      <TableCellActions item={row.original} />
+      <TableCellActions 
+        item={row.original}
+        onEdit={(data) => onEdit(row.original, data)}
+        onDelete={() => onDelete(row.original)}
+      />
     ),
   },
   ]
@@ -301,10 +319,48 @@ function DraggableRow({ row }: { row: Row<z.infer<typeof schema>> }) {
 
 export function DataTable({
   data: initialData,
+  onAddTransaction,
+  onEditTransaction,
+  onDeleteTransaction,
 }: {
   data: z.infer<typeof schema>[]
+  onAddTransaction?: (data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => void
+  onEditTransaction?: (id: number, data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => void
+  onDeleteTransaction?: (id: number) => void
 }) {
-  const columns = useColumns()
+  const handleEdit = React.useCallback((item: z.infer<typeof schema>, data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => {
+    if (onEditTransaction) {
+      onEditTransaction(item.id, data)
+    }
+  }, [onEditTransaction])
+
+  const handleDelete = React.useCallback((item: z.infer<typeof schema>) => {
+    if (window.confirm(`Tem certeza que deseja deletar a transação "${item.transaction}"?`)) {
+      if (onDeleteTransaction) {
+        onDeleteTransaction(item.id)
+      }
+    }
+  }, [onDeleteTransaction])
+
+  const columns = useColumns(handleEdit, handleDelete)
   const [data, setData] = React.useState(() => initialData)
   const [isNewTransactionDrawerOpen, setIsNewTransactionDrawerOpen] = React.useState(false)
   const [rowSelection, setRowSelection] = React.useState({})
@@ -324,6 +380,10 @@ export function DataTable({
     useSensor(TouchSensor, {}),
     useSensor(KeyboardSensor, {})
   )
+
+  React.useEffect(() => {
+    setData(initialData)
+  }, [initialData])
 
   const dataIds = React.useMemo<UniqueIdentifier[]>(
     () => data?.map(({ id }) => id) || [],
@@ -429,7 +489,12 @@ export function DataTable({
             open={isNewTransactionDrawerOpen}
             onOpenChange={setIsNewTransactionDrawerOpen}
             title="Nova Transação"
-            onConcluir={handleConcluirNovaTransacao}
+            onConcluir={(data) => {
+              if (onAddTransaction) {
+                onAddTransaction(data)
+              }
+              setIsNewTransactionDrawerOpen(false)
+            }}
           />
         </div>
       </div>
@@ -601,27 +666,19 @@ function convertType(type: "Receita" | "Despesa"): string {
   return type.toLowerCase()
 }
 
-function handleConcluir(data: {
-  nome: string
-  valor: string
-  tipo: string
-  categoria: string
-  data: Date | undefined
+function TableCellViewer({ 
+  item,
+  onEdit,
+}: { 
+  item: z.infer<typeof schema>
+  onEdit: (data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => void
 }) {
-  console.log("Dados da transação editada:", data)
-}
-
-function handleConcluirNovaTransacao(data: {
-  nome: string
-  valor: string
-  tipo: string
-  categoria: string
-  data: Date | undefined
-}) {
-  console.log("Dados da nova transação:", data)
-}
-
-function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
 
   return (
@@ -637,7 +694,10 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
         open={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}
         title="Editar Transação"
-        onConcluir={handleConcluir}
+        onConcluir={(data) => {
+          onEdit(data)
+          setIsDrawerOpen(false)
+        }}
         initialData={{
           nome: item.transaction,
           valor: item.value.toString(),
@@ -650,7 +710,21 @@ function TableCellViewer({ item }: { item: z.infer<typeof schema> }) {
   )
 }
 
-function TableCellActions({ item }: { item: z.infer<typeof schema> }) {
+function TableCellActions({ 
+  item,
+  onEdit,
+  onDelete,
+}: { 
+  item: z.infer<typeof schema>
+  onEdit: (data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => void
+  onDelete: () => void
+}) {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
 
   return (
@@ -670,14 +744,19 @@ function TableCellActions({ item }: { item: z.infer<typeof schema> }) {
           <DropdownMenuItem onClick={() => setIsDrawerOpen(true)}>
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem variant="destructive">Deletar</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive" onClick={onDelete}>
+            Deletar
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
       <TransactionDrawer
         open={isDrawerOpen}
         onOpenChange={setIsDrawerOpen}
         title="Editar Transação"
-        onConcluir={handleConcluir}
+        onConcluir={(data) => {
+          onEdit(data)
+          setIsDrawerOpen(false)
+        }}
         initialData={{
           nome: item.transaction,
           valor: item.value.toString(),
