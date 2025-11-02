@@ -33,6 +33,7 @@ export interface MultiSelectProps {
   placeholder?: string
   searchPlaceholder?: string
   emptyText?: string
+  createText?: (searchValue: string) => string
   className?: string
   disabled?: boolean
   defaultOptions?: MultiSelectOption[]
@@ -70,6 +71,7 @@ export function MultiSelect({
   placeholder = "Selecione uma opção ou crie uma...",
   searchPlaceholder = "Buscar...",
   emptyText = "Nenhum resultado encontrado.",
+  createText,
   className,
   disabled = false,
   defaultOptions,
@@ -267,8 +269,8 @@ export function MultiSelect({
           <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full p-0" align="start">
-        <Command shouldFilter={false}>
+      <PopoverContent className="w-full p-0" align="start" onWheel={(e) => e.stopPropagation()}>
+        <Command shouldFilter={false} className="overflow-visible">
           <CommandInput
             placeholder={searchPlaceholder}
             value={searchValue}
@@ -280,7 +282,7 @@ export function MultiSelect({
               }
             }}
           />
-          <CommandList className="max-h-[200px]">
+          <CommandList className="max-h-[200px] overflow-y-auto overflow-x-hidden">
             {canCreateNew ? (
               <>
                 <CommandGroup>
@@ -288,7 +290,7 @@ export function MultiSelect({
                     onSelect={createNewOption}
                     className="cursor-pointer text-primary"
                   >
-                    Criar "{searchValue}"
+                    {createText ? createText(searchValue) : `Criar "${searchValue}"`}
                   </CommandItem>
                 </CommandGroup>
               </>
