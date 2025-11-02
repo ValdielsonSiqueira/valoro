@@ -196,6 +196,7 @@ function useColumns(
         <TableCellViewer 
           item={row.original}
           onEdit={(data) => onEdit(row.original, data)}
+          isVisible={isVisible}
         />
       )
     },
@@ -286,6 +287,7 @@ function useColumns(
         item={row.original}
         onEdit={(data) => onEdit(row.original, data)}
         onDelete={() => onDelete(row.original)}
+        isVisible={isVisible}
       />
     ),
   },
@@ -669,6 +671,7 @@ function convertType(type: "Receita" | "Despesa"): string {
 function TableCellViewer({ 
   item,
   onEdit,
+  isVisible = true,
 }: { 
   item: z.infer<typeof schema>
   onEdit: (data: {
@@ -678,6 +681,7 @@ function TableCellViewer({
     categoria: string
     data: Date | undefined
   }) => void
+  isVisible?: boolean
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
 
@@ -686,7 +690,12 @@ function TableCellViewer({
       <Button 
         variant="link" 
         className="text-foreground w-fit px-0 text-left"
-        onClick={() => setIsDrawerOpen(true)}
+        onClick={() => {
+          if (isVisible) {
+            setIsDrawerOpen(true)
+          }
+        }}
+        disabled={!isVisible}
       >
         {item.transaction}
       </Button>
@@ -714,6 +723,7 @@ function TableCellActions({
   item,
   onEdit,
   onDelete,
+  isVisible = true,
 }: { 
   item: z.infer<typeof schema>
   onEdit: (data: {
@@ -724,6 +734,7 @@ function TableCellActions({
     data: Date | undefined
   }) => void
   onDelete: () => void
+  isVisible?: boolean
 }) {
   const [isDrawerOpen, setIsDrawerOpen] = React.useState(false)
 
@@ -735,16 +746,32 @@ function TableCellActions({
             variant="ghost"
             className="data-[state=open]:bg-muted text-muted-foreground flex size-8"
             size="icon"
+            disabled={!isVisible}
           >
             <IconDotsVertical />
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-32">
-          <DropdownMenuItem onClick={() => setIsDrawerOpen(true)}>
+          <DropdownMenuItem 
+            onClick={() => {
+              if (isVisible) {
+                setIsDrawerOpen(true)
+              }
+            }}
+            disabled={!isVisible}
+          >
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem variant="destructive" onClick={onDelete}>
+          <DropdownMenuItem 
+            variant="destructive" 
+            onClick={() => {
+              if (isVisible) {
+                onDelete()
+              }
+            }}
+            disabled={!isVisible}
+          >
             Deletar
           </DropdownMenuItem>
         </DropdownMenuContent>

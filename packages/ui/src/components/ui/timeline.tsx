@@ -190,7 +190,7 @@ export function Timeline({
                                   {formattedDate}
                                 </span>
                                 {(onEdit || onDelete) && (
-                                  <div className="flex items-center gap-1 ml-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <div className="flex items-center gap-1 ml-2">
                                     {onEdit && (
                                       <Button
                                         variant="ghost"
@@ -198,8 +198,11 @@ export function Timeline({
                                         className="size-6 hover:bg-accent"
                                         onClick={(e) => {
                                           e.stopPropagation()
-                                          onEdit(transaction)
+                                          if (isVisible) {
+                                            onEdit(transaction)
+                                          }
                                         }}
+                                        disabled={!isVisible}
                                       >
                                         <Pencil className="size-3" />
                                       </Button>
@@ -211,8 +214,11 @@ export function Timeline({
                                         className="size-6 hover:bg-accent"
                                         onClick={(e) => {
                                           e.stopPropagation()
-                                          onDelete(transaction)
+                                          if (isVisible) {
+                                            onDelete(transaction)
+                                          }
                                         }}
+                                        disabled={!isVisible}
                                       >
                                         <Trash2 className="size-3" />
                                       </Button>
