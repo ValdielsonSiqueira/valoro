@@ -105,6 +105,9 @@ export {
 // Label
 export { Label } from "./components/ui/label"
 
+// Login Form
+export { LoginForm, type LoginFormProps } from "./components/ui/login-form"
+
 // Popover
 export { Popover, PopoverTrigger, PopoverContent } from "./components/ui/popover"
 
