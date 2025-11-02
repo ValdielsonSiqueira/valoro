@@ -1,5 +1,6 @@
 "use client"
 
+import { useMemo } from "react"
 import { IconTrendingDown, IconTrendingUp } from "@tabler/icons-react"
 import { useVisibility } from "@/contexts/visibility-context"
 import { Badge } from "@valoro/ui"
@@ -30,16 +31,18 @@ interface SectionCardsProps {
 export function SectionCards({ data = [] }: SectionCardsProps) {
   const { isVisible } = useVisibility()
 
-  // Calcular receitas e despesas
-  const receitas = data
-    .filter(item => item.type === "Receita")
-    .reduce((sum, item) => sum + item.value, 0)
+  const receitas = useMemo(() => {
+    return data
+      .filter(item => item.type === "Receita")
+      .reduce((sum, item) => sum + item.value, 0)
+  }, [data])
   
-  const despesas = data
-    .filter(item => item.type === "Despesa")
-    .reduce((sum, item) => sum + item.value, 0)
+  const despesas = useMemo(() => {
+    return data
+      .filter(item => item.type === "Despesa")
+      .reduce((sum, item) => sum + item.value, 0)
+  }, [data])
 
-  // Formatar valores em reais
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat("pt-BR", {
       style: "currency",

@@ -202,6 +202,9 @@ export { ToggleGroup, ToggleGroupItem } from "./components/ui/toggle-group"
 // Tooltip
 export { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "./components/ui/tooltip"
 
+// Timeline
+export { Timeline } from "./components/ui/timeline"
+
 // Contexts
 export { ThemeProvider, useTheme } from "./contexts/theme-context"
 

@@ -10,16 +10,88 @@ import {
 } from "@/components/dashboard-skeletons"
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
-import { VisibilityProvider } from "@/contexts/visibility-context"
+import { TransactionDrawer } from "@/components/transaction-drawer"
+import { VisibilityProvider, useVisibility } from "@/contexts/visibility-context"
 import { useTransactions } from "@/hooks/use-transactions"
-import { Skeleton } from "@valoro/ui"
+import { Transaction } from "@/lib/transactions-service"
+import { Skeleton, Timeline } from "@valoro/ui"
 import {
   SidebarInset,
   SidebarProvider,
 } from "@valoro/ui"
+import { useState } from "react"
 
-export default function Page() {
+function parseDate(dateString: string): Date | undefined {
+  const parts = dateString.split("/")
+  if (parts.length === 3) {
+    const day = parseInt(parts[0], 10)
+    const month = parseInt(parts[1], 10) - 1
+    const year = parseInt(parts[2], 10)
+    return new Date(year, month, day)
+  }
+  return undefined
+}
+
+function formatCurrency(value: number): string {
+  return new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  }).format(value)
+}
+
+function convertTransactionToTimeline(transaction: Transaction) {
+  const amountValue = transaction.type === "Despesa" 
+    ? -Math.abs(transaction.value) 
+    : Math.abs(transaction.value)
+  const formattedAmount = formatCurrency(amountValue)
+
+  return {
+    id: transaction.id,
+    category: transaction.category,
+    amount: formattedAmount,
+    date: transaction.date,
+  }
+}
+
+function DashboardContent() {
   const { transactions, isLoading, addTransaction, editTransaction, removeTransaction } = useTransactions()
+  const { isVisible } = useVisibility()
+  const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false)
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null)
+
+  const timelineTransactions = transactions.map(convertTransactionToTimeline)
+
+  const handleTimelineEdit = (timelineTransaction: { id?: string | number; category: string; amount: string; date: string | Date }) => {
+    const transaction = transactions.find(t => t.id === timelineTransaction.id)
+    if (transaction) {
+      setEditingTransaction(transaction)
+      setIsEditDrawerOpen(true)
+    }
+  }
+
+  const handleTimelineDelete = (timelineTransaction: { id?: string | number; category: string; amount: string; date: string | Date }) => {
+    if (timelineTransaction.id) {
+      removeTransaction(Number(timelineTransaction.id))
+    }
+  }
+
+  const handleEditConcluir = (data: {
+    nome: string
+    valor: string
+    tipo: string
+    categoria: string
+    data: Date | undefined
+  }) => {
+    if (editingTransaction) {
+      editTransaction(editingTransaction.id, data)
+      setIsEditDrawerOpen(false)
+      setEditingTransaction(null)
+    }
+  }
+
+  const convertType = (type: "Receita" | "Despesa"): string => {
+    return type.toLowerCase()
+  }
 
   const headerSkeleton = (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-(--header-height)">
@@ -41,7 +113,6 @@ export default function Page() {
   )
 
   return (
-    <VisibilityProvider>
     <SidebarProvider
       style={
         {
@@ -87,13 +158,45 @@ export default function Page() {
                       onDeleteTransaction={removeTransaction}
                     />
                   </div>
+                  <div id="extrato" className="px-4 lg:px-6">
+                    <Timeline
+                      transactions={timelineTransactions}
+                      title="Extrato"
+                      emptyMessage="Nenhuma transação encontrada"
+                      onEdit={handleTimelineEdit}
+                      onDelete={handleTimelineDelete}
+                      isVisible={isVisible}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
+            {editingTransaction && (
+              <TransactionDrawer
+                open={isEditDrawerOpen}
+                onOpenChange={setIsEditDrawerOpen}
+                title="Editar Transação"
+                onConcluir={handleEditConcluir}
+                initialData={{
+                  nome: editingTransaction.transaction,
+                  valor: editingTransaction.value.toString(),
+                  tipo: convertType(editingTransaction.type),
+                  categoria: editingTransaction.category,
+                  data: parseDate(editingTransaction.date),
+                }}
+              />
+            )}
           </>
         )}
       </SidebarInset>
     </SidebarProvider>
+  )
+}
+
+export default function Page() {
+  return (
+    <VisibilityProvider>
+      <DashboardContent />
     </VisibilityProvider>
   )
 }
