@@ -58,6 +58,19 @@ export type { ChartConfig } from "./components/ui/chart"
 // Checkbox
 export { Checkbox } from "./components/ui/checkbox"
 
+// Command
+export {
+  Command,
+  CommandDialog,
+  CommandInput,
+  CommandList,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandShortcut,
+  CommandSeparator,
+} from "./components/ui/command"
+
 // Dialog
 export {
   Dialog,
@@ -107,6 +120,14 @@ export { Label } from "./components/ui/label"
 
 // Login Form
 export { LoginForm, type LoginFormProps } from "./components/ui/login-form"
+
+// Multi Select
+export {
+  MultiSelect,
+  type MultiSelectOption,
+  type MultiSelectProps,
+  type GetColorFunction,
+} from "./components/ui/multi-select"
 
 // Popover
 export { Popover, PopoverTrigger, PopoverContent } from "./components/ui/popover"

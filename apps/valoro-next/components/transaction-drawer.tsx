@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { z } from "zod"
 import { useIsMobile } from "@/hooks/use-mobile"
 import {
@@ -19,6 +19,8 @@ import {
   SelectTrigger,
   SelectValue,
   Button,
+  MultiSelect,
+  type MultiSelectOption,
 } from "@valoro/ui"
 import { DatePicker } from "@valoro/ui"
 
@@ -82,11 +84,38 @@ export function TransactionDrawer({
   const [valor, setValor] = useState<string>("")
   const [tipo, setTipo] = useState<string>("")
   const [categoria, setCategoria] = useState<string>("")
+  const [categoriasSelecionadas, setCategoriasSelecionadas] = useState<string[]>([])
   const [data, setData] = useState<Date | undefined>(undefined)
   const [errors, setErrors] = useState<Partial<Record<keyof TransactionFormData, string>>>({})
   const [touched, setTouched] = useState<Partial<Record<keyof TransactionFormData, boolean>>>({})
   
   const [mounted, setMounted] = useState(false)
+
+  const categoriaOptions: MultiSelectOption[] = useMemo(() => [
+    { value: "salario", label: "Salário" },
+    { value: "assinaturas", label: "Assinaturas" },
+    { value: "cartao-credito", label: "Cartão de Crédito" },
+    { value: "comida", label: "Comida" },
+    { value: "mercado", label: "Mercado" },
+    { value: "financiamento", label: "Financiamento" },
+    { value: "internet", label: "Internet" },
+    { value: "casa", label: "Casa" },
+    { value: "pensao", label: "Pensão" },
+    { value: "reserva", label: "Reserva" },
+    { value: "investimentos", label: "Investimentos" },
+    { value: "entretenimento", label: "Entretenimento" },
+    { value: "educacao", label: "Educação" },
+    { value: "transferencia", label: "Transferência" },
+    { value: "deposito", label: "Depósito" },
+  ], [])
+
+  const getCategoriaValueForMultiSelect = useCallback((categoriaString: string): string[] => {
+    if (!categoriaString) return []
+    const opcao = categoriaOptions.find(
+      opt => opt.label.toLowerCase() === categoriaString.toLowerCase()
+    )
+    return opcao ? [opcao.value] : []
+  }, [categoriaOptions])
   
   useEffect(() => {
     setMounted(true)
@@ -99,7 +128,9 @@ export function TransactionDrawer({
       setNome(initialData.nome || "")
       setValor(initialData.valor || "")
       setTipo(normalizeType(initialData.tipo))
-      setCategoria(initialData.categoria || "")
+      const categoriaInicial = initialData.categoria || ""
+      setCategoria(categoriaInicial)
+      setCategoriasSelecionadas(getCategoriaValueForMultiSelect(categoriaInicial))
       setData(initialData.data)
       setErrors({})
       setTouched({})
@@ -108,11 +139,12 @@ export function TransactionDrawer({
       setValor("")
       setTipo("")
       setCategoria("")
+      setCategoriasSelecionadas([])
       setData(undefined)
       setErrors({})
       setTouched({})
     }
-  }, [initialData, mounted, open, title])
+  }, [initialData, mounted, open, title, getCategoriaValueForMultiSelect])
 
   const validateForm = (): boolean => {
     const fieldErrors: Partial<Record<keyof TransactionFormData, string>> = {}
@@ -137,6 +169,10 @@ export function TransactionDrawer({
     }
     
     if (!categoria || categoria.trim() === "") {
+      fieldErrors.categoria = "A categoria é obrigatória"
+    }
+    
+    if (categoriasSelecionadas.length === 0) {
       fieldErrors.categoria = "A categoria é obrigatória"
     }
     
@@ -184,7 +220,22 @@ export function TransactionDrawer({
       setValor("")
       setTipo("")
       setCategoria("")
+      setCategoriasSelecionadas([])
       setData(undefined)
+    }
+  }
+
+  const handleCategoriasChange = (selected: string[]) => {
+    setCategoriasSelecionadas(selected)
+    const primeiraCategoria = selected.length > 0 ? selected[0] : ""
+    
+    const opcaoSelecionada = categoriaOptions.find(opt => opt.value === primeiraCategoria)
+    const categoriaLabel = opcaoSelecionada ? opcaoSelecionada.label : primeiraCategoria
+    
+    setCategoria(categoriaLabel)
+    setTouched((prev) => ({ ...prev, categoria: true }))
+    if (touched.categoria && errors.categoria) {
+      setErrors((prev) => ({ ...prev, categoria: undefined }))
     }
   }
 
@@ -284,37 +335,15 @@ export function TransactionDrawer({
 
               <div className="flex flex-col gap-3">
                 <Label htmlFor="categoria">Categoria</Label>
-                <Select 
-                  value={categoria} 
-                  onValueChange={(value) => {
-                    setCategoria(value)
-                    setTouched((prev) => ({ ...prev, categoria: true }))
-                    if (touched.categoria && errors.categoria) {
-                      setErrors((prev) => ({ ...prev, categoria: undefined }))
-                    }
-                  }}
-                >
-                  <SelectTrigger 
-                    id="categoria" 
-                    className={`w-full ${(touched.categoria || errors.categoria) && errors.categoria ? '!border-destructive' : ''}`}
-                    aria-invalid={(touched.categoria || errors.categoria) && !!errors.categoria}
-                    aria-describedby={touched.categoria && errors.categoria ? "categoria-error" : undefined}
-                  >
-                    <SelectValue placeholder="Selecione a categoria" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Salário">Salário</SelectItem>
-                    <SelectItem value="Financiamento">Financiamento</SelectItem>
-                    <SelectItem value="educação">Educação</SelectItem>
-                    <SelectItem value="Entretenimento">Entretenimento</SelectItem>
-                    <SelectItem value="Assinaturas">Assinaturas</SelectItem>
-                    <SelectItem value="Casa">Casa</SelectItem>
-                    <SelectItem value="Investimentos">Investimentos</SelectItem>
-                    <SelectItem value="transferencia">Transferência</SelectItem>
-                    <SelectItem value="deposito">Depósito</SelectItem>
-                  </SelectContent>
-                </Select>
-                {(touched.categoria || errors.categoria) && errors.categoria && (
+                <MultiSelect
+                  options={categoriaOptions}
+                  selected={categoriasSelecionadas}
+                  onSelectedChange={handleCategoriasChange}
+                  placeholder="Selecione uma opção ou crie uma..."
+                  searchPlaceholder="Buscar..."
+                  className={(touched.categoria || errors.categoria) && errors.categoria ? '!border-destructive' : ''}
+                  singleSelect={true}
+                />                {(touched.categoria || errors.categoria) && errors.categoria && (
                   <span id="categoria-error" className="text-sm text-destructive">
                     {errors.categoria}
                   </span>
