@@ -23,6 +23,16 @@ import {
   type MultiSelectOption,
 } from "@valoro/ui"
 import { DatePicker } from "@valoro/ui"
+import { CATEGORY_COLORS } from "@/lib/category-colors"
+import {
+  loadCustomCategories,
+  addCustomCategory,
+  saveCustomCategories,
+  saveCustomCategoryColor,
+  loadCustomCategoryColors,
+  normalizeCategoryValue,
+  type CustomCategory,
+} from "@/lib/custom-categories"
 
 const transactionSchema = z.object({
   nome: z.string().min(1, "O nome é obrigatório"),
@@ -90,8 +100,9 @@ export function TransactionDrawer({
   const [touched, setTouched] = useState<Partial<Record<keyof TransactionFormData, boolean>>>({})
   
   const [mounted, setMounted] = useState(false)
+  const [customCategoriesLoaded, setCustomCategoriesLoaded] = useState(0)
 
-  const categoriaOptions: MultiSelectOption[] = useMemo(() => [
+  const defaultCategories: MultiSelectOption[] = useMemo(() => [
     { value: "salario", label: "Salário" },
     { value: "assinaturas", label: "Assinaturas" },
     { value: "cartao-credito", label: "Cartão de Crédito" },
@@ -109,13 +120,89 @@ export function TransactionDrawer({
     { value: "deposito", label: "Depósito" },
   ], [])
 
+  const customCategories = useMemo(() => {
+    return loadCustomCategories().map((cat) => ({
+      value: cat.value,
+      label: cat.label,
+      color: cat.color,
+    }))
+  }, [customCategoriesLoaded]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const categoriaOptions: MultiSelectOption[] = useMemo(() => {
+    return [...defaultCategories, ...customCategories]
+  }, [defaultCategories, customCategories])
+
+  const allCategoryColors = useMemo(() => {
+    const customColors = loadCustomCategoryColors()
+    return { ...CATEGORY_COLORS, ...customColors }
+  }, [])
+
+  const getCategoryColorForLabel = useCallback((label: string): string | undefined => {
+    if (allCategoryColors[label]) {
+      return allCategoryColors[label]
+    }
+    
+    const customCat = loadCustomCategories().find(
+      cat => cat.label.toLowerCase() === label.toLowerCase()
+    )
+    if (customCat?.color) {
+      return customCat.color
+    }
+    
+    const DEFAULT_COLORS = [
+      "bg-green-500",
+      "bg-blue-500",
+      "bg-purple-500",
+      "bg-pink-500",
+      "bg-red-500",
+      "bg-orange-500",
+      "bg-yellow-500",
+      "bg-teal-500",
+      "bg-cyan-500",
+      "bg-indigo-500",
+      "bg-violet-500",
+      "bg-emerald-500",
+      "bg-lime-500",
+      "bg-amber-500",
+      "bg-red-600",
+      "bg-blue-600",
+      "bg-purple-600",
+      "bg-pink-600",
+    ]
+    
+    const hash = label.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
+    const selectedColor = DEFAULT_COLORS[hash % DEFAULT_COLORS.length]
+    
+    return selectedColor
+  }, [allCategoryColors])
+
   const getCategoriaValueForMultiSelect = useCallback((categoriaString: string): string[] => {
     if (!categoriaString) return []
+    
     const opcao = categoriaOptions.find(
       opt => opt.label.toLowerCase() === categoriaString.toLowerCase()
     )
-    return opcao ? [opcao.value] : []
-  }, [categoriaOptions])
+    
+    if (opcao) return [opcao.value]
+    
+    
+    const normalizedValue = normalizeCategoryValue(categoriaString)
+    
+    const existsInCustom = customCategories.some(
+      cat => cat.label.toLowerCase() === categoriaString.toLowerCase()
+    )
+    
+    if (!existsInCustom && categoriaString.trim()) {
+      const newCustomCategory: CustomCategory = {
+        value: normalizedValue,
+        label: categoriaString.trim(),
+      }
+      addCustomCategory(newCustomCategory)
+      
+    }
+    
+    return [normalizedValue]
+  }, [categoriaOptions, customCategories])
   
   useEffect(() => {
     setMounted(true)
@@ -201,12 +288,61 @@ export function TransactionDrawer({
       return
     }
     
+    const categoriaFinal = categoria.trim()
+    
+    const isDefaultCategory = defaultCategories.some(
+      cat => cat.label.toLowerCase() === categoriaFinal.toLowerCase()
+    )
+    
+    if (!isDefaultCategory && categoriaFinal) {
+      const normalizedValue = normalizeCategoryValue(categoriaFinal)
+      
+      const existsInCustom = loadCustomCategories().some(
+        cat => cat.label.toLowerCase() === categoriaFinal.toLowerCase()
+      )
+      
+      if (!existsInCustom) {
+        const categoryColor = getCategoryColorForLabel(categoriaFinal)
+        
+        const newCustomCategory: CustomCategory = {
+          value: normalizedValue,
+          label: categoriaFinal,
+          color: categoryColor,
+        }
+        addCustomCategory(newCustomCategory)
+        
+        if (categoryColor) {
+          saveCustomCategoryColor(categoriaFinal, categoryColor)
+        }
+        
+        setCustomCategoriesLoaded(prev => prev + 1)
+      } else {
+        const existingCustom = loadCustomCategories().find(
+          cat => cat.label.toLowerCase() === categoriaFinal.toLowerCase()
+        )
+        
+        const categoryColor = getCategoryColorForLabel(categoriaFinal)
+        
+        if (categoryColor && existingCustom && existingCustom.color !== categoryColor) {
+          saveCustomCategoryColor(categoriaFinal, categoryColor)
+          
+          const updatedCategories = loadCustomCategories().map(cat =>
+            cat.label.toLowerCase() === categoriaFinal.toLowerCase()
+              ? { ...cat, color: categoryColor }
+              : cat
+          )
+          saveCustomCategories(updatedCategories)
+          setCustomCategoriesLoaded(prev => prev + 1)
+        }
+      }
+    }
+    
     if (onConcluir) {
       onConcluir({
         nome: nome.trim(),
         valor: valor.trim(),
         tipo,
-        categoria: categoria.trim(),
+        categoria: categoriaFinal,
         data,
       })
     }
@@ -229,7 +365,41 @@ export function TransactionDrawer({
     setCategoriasSelecionadas(selected)
     const primeiraCategoria = selected.length > 0 ? selected[0] : ""
     
-    const opcaoSelecionada = categoriaOptions.find(opt => opt.value === primeiraCategoria)
+    if (!primeiraCategoria) {
+      setCategoria("")
+      return
+    }
+    
+    let opcaoSelecionada = categoriaOptions.find(opt => opt.value === primeiraCategoria)
+    
+    if (!opcaoSelecionada) {
+      const customCat = loadCustomCategories().find(cat => cat.value === primeiraCategoria)
+      
+      if (customCat) {
+        opcaoSelecionada = {
+          value: customCat.value,
+          label: customCat.label,
+          color: customCat.color,
+        }
+      } else {
+        const defaultCat = defaultCategories.find(cat => cat.value === primeiraCategoria)
+        
+        if (defaultCat) {
+          opcaoSelecionada = defaultCat
+        } else {
+          const categoryLabel = primeiraCategoria
+            .split("-")
+            .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(" ")
+          
+          opcaoSelecionada = {
+            value: primeiraCategoria,
+            label: categoryLabel,
+          }
+        }
+      }
+    }
+    
     const categoriaLabel = opcaoSelecionada ? opcaoSelecionada.label : primeiraCategoria
     
     setCategoria(categoriaLabel)
@@ -343,6 +513,8 @@ export function TransactionDrawer({
                   searchPlaceholder="Buscar..."
                   className={(touched.categoria || errors.categoria) && errors.categoria ? '!border-destructive' : ''}
                   singleSelect={true}
+                  colorMap={allCategoryColors}
+                  defaultOptions={customCategories}
                 />                {(touched.categoria || errors.categoria) && errors.categoria && (
                   <span id="categoria-error" className="text-sm text-destructive">
                     {errors.categoria}

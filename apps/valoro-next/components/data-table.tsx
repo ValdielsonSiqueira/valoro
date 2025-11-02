@@ -58,6 +58,8 @@ import { Badge } from "@valoro/ui"
 import { Button } from "@valoro/ui"
 import { Checkbox } from "@valoro/ui"
 import { TransactionDrawer } from "./transaction-drawer"
+import { getCategoryColor } from "@/lib/category-colors"
+import { loadCustomCategoryColors } from "@/lib/custom-categories"
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -126,17 +128,16 @@ const getTypeBadgeVariant = (type: "Receita" | "Despesa") => {
   return type === "Receita" ? "default" : "destructive"
 }
 
-const getCategoryBadgeVariant = (category: string) => {
-  const categoryColors: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
-    "Salário": "default",
-    "Financiamento": "destructive",
-    "educação": "outline",
-    "Entretenimento": "outline",
-    "Assinaturas": "destructive",
-    "Casa": "destructive",
-    "Investimentos": "secondary",
+const getCategoryBadgeStyle = (category: string) => {
+  const customColors = loadCustomCategoryColors()
+  const allColors = { ...customColors }
+  
+  const color = allColors[category] || getCategoryColor(category)
+  
+  return {
+    className: `${color} text-white border-transparent`,
+    variant: "secondary" as const,
   }
-  return categoryColors[category] || "outline"
 }
 
 function useColumns(
@@ -243,14 +244,17 @@ function useColumns(
         <span>Categoria</span>
       </div>
     ),
-    cell: ({ row }) => (
-      <Badge 
-        variant={getCategoryBadgeVariant(row.original.category)} 
-        className="px-1.5"
-      >
-        {row.original.category}
-      </Badge>
-    ),
+    cell: ({ row }) => {
+      const badgeStyle = getCategoryBadgeStyle(row.original.category)
+      return (
+        <Badge 
+          variant={badgeStyle.variant}
+          className={`px-1.5 ${badgeStyle.className}`}
+        >
+          {row.original.category}
+        </Badge>
+      )
+    },
   },
   {
     accessorKey: "date",
