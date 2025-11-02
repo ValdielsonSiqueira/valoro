@@ -3,6 +3,7 @@ import { cn } from "../../lib/utils"
 import { Button } from "./button"
 import { Input } from "./input"
 import { Label } from "./label"
+import { Spinner } from "./spinner"
 
 export interface LoginFormProps extends React.ComponentPropsWithoutRef<"form"> {
   title?: string
@@ -12,6 +13,7 @@ export interface LoginFormProps extends React.ComponentPropsWithoutRef<"form"> {
   emailLabel?: string
   emailPlaceholder?: string
   submitButtonText?: string
+  isLoading?: boolean
   errors?: {
     name?: string
     email?: string
@@ -27,6 +29,7 @@ export function LoginForm({
   emailLabel = "Email",
   emailPlaceholder = "m@example.com",
   submitButtonText = "Login",
+  isLoading = false,
   errors,
   ...props
 }: LoginFormProps) {
@@ -48,6 +51,7 @@ export function LoginForm({
             name="name"
             type="text"
             placeholder={namePlaceholder}
+            disabled={isLoading}
             aria-invalid={!!errors?.name}
             aria-describedby={errors?.name ? "name-error" : undefined}
             className={errors?.name ? "border-destructive" : ""}
@@ -65,6 +69,7 @@ export function LoginForm({
             name="email"
             type="email"
             placeholder={emailPlaceholder}
+            disabled={isLoading}
             aria-invalid={!!errors?.email}
             aria-describedby={errors?.email ? "email-error" : undefined}
             className={errors?.email ? "border-destructive" : ""}
@@ -75,8 +80,15 @@ export function LoginForm({
             </span>
           )}
         </div>
-        <Button type="submit" className="w-full">
-          {submitButtonText}
+        <Button type="submit" className="w-full" disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <Spinner className="mr-2" />
+              {submitButtonText}
+            </>
+          ) : (
+            submitButtonText
+          )}
         </Button>
       </div>
     </form>

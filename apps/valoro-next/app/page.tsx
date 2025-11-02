@@ -15,6 +15,7 @@ type LoginFormData = {
 export default function LoginPage() {
   const router = useRouter()
   const [errors, setErrors] = useState<Partial<Record<keyof LoginFormData, string>>>({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const validateForm = (name: string, email: string): boolean => {
     const fieldErrors: Partial<Record<keyof LoginFormData, string>> = {}
@@ -38,7 +39,7 @@ export default function LoginPage() {
     return true
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const formData = new FormData(e.currentTarget)
     const name = formData.get("name") as string
@@ -48,15 +49,23 @@ export default function LoginPage() {
       return
     }
 
-    const userProfile = {
-      name: name.trim(),
-      email: email.trim(),
-      avatar: "https://github.com/shadcn.png",
-    }
+    setIsLoading(true)
 
-    saveUserProfile(userProfile)
-    
-    router.push("/dashboard")
+    try {
+      const userProfile = {
+        name: name.trim(),
+        email: email.trim(),
+        avatar: "https://github.com/shadcn.png",
+      }
+
+      saveUserProfile(userProfile)
+      await new Promise((resolve) => setTimeout(resolve, 500))
+      
+      router.push("/dashboard")
+    } catch (error) {
+      console.error("Erro ao fazer login:", error)
+      setIsLoading(false)
+    }
   }
 
   return (
@@ -78,6 +87,7 @@ export default function LoginPage() {
               emailLabel="E-mail"
               emailPlaceholder="seu@email.com"
               submitButtonText="Entrar"
+              isLoading={isLoading}
               errors={errors}
               onSubmit={handleSubmit}
             />
