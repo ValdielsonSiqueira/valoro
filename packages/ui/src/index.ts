@@ -191,7 +191,7 @@ export {
 export { Skeleton } from "./components/ui/skeleton"
 
 // Sonner (Toaster)
-export { Toaster } from "./components/ui/sonner"
+export { Toaster, toast } from "./components/ui/sonner"
 
 // Spinner
 export { Spinner } from "./components/ui/spinner"

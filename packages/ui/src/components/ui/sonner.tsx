@@ -26,9 +26,21 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       style={
         {
-          "--normal-bg": "var(--popover)",
-          "--normal-text": "var(--popover-foreground)",
-          "--normal-border": "var(--border)",
+          "--normal-bg": "oklch(var(--popover))",
+          "--normal-text": "oklch(var(--popover-foreground))",
+          "--normal-border": "oklch(var(--border))",
+          "--success-bg": "oklch(var(--success))",
+          "--success-text": "oklch(var(--success-foreground))",
+          "--success-border": "oklch(var(--success))",
+          "--error-bg": "oklch(var(--destructive))",
+          "--error-text": "oklch(var(--destructive-foreground))",
+          "--error-border": "oklch(var(--destructive))",
+          "--warning-bg": "oklch(var(--warning))",
+          "--warning-text": "oklch(var(--warning-foreground))",
+          "--warning-border": "oklch(var(--warning))",
+          "--info-bg": "oklch(var(--info))",
+          "--info-text": "oklch(var(--info-foreground))",
+          "--info-border": "oklch(var(--info))",
           "--border-radius": "var(--radius)",
         } as React.CSSProperties
       }
@@ -38,3 +50,4 @@ const Toaster = ({ ...props }: ToasterProps) => {
 }
 
 export { Toaster }
+export { toast } from "sonner"

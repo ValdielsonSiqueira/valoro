@@ -1,12 +1,17 @@
 "use client"
 
-import { ThemeProvider } from "@valoro/ui"
+import { ThemeProvider, Toaster } from "@valoro/ui"
 
 export function ThemeProviderWrapper({
   children,
 }: {
   children: React.ReactNode
 }) {
-  return <ThemeProvider defaultTheme="light">{children}</ThemeProvider>
+  return (
+    <ThemeProvider defaultTheme="light">
+      {children}
+      <Toaster />
+    </ThemeProvider>
+  )
 }
 

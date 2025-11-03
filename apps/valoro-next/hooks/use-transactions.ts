@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useRef } from "react"
+import { toast } from "@valoro/ui"
 import {
   Transaction,
   getTransactions,
@@ -44,6 +45,7 @@ export function useTransactions() {
     const newTransaction = createTransaction(data)
     if (newTransaction) {
       setTransactions(prev => [...prev, newTransaction])
+      toast.success("Transação adicionada com sucesso!")
       return true
     }
     return false
@@ -61,6 +63,7 @@ export function useTransactions() {
       setTransactions(prev =>
         prev.map(t => t.id === id ? updatedTransaction : t)
       )
+      toast.success("Transação alterada com sucesso!")
       return true
     }
     return false
