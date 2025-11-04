@@ -58,6 +58,7 @@ import { Badge } from "@valoro/ui"
 import { Button } from "@valoro/ui"
 import { Checkbox } from "@valoro/ui"
 import { TransactionDrawer } from "./transaction-drawer"
+import { DeleteTransactionDialog } from "./delete-transaction-dialog"
 import { getCategoryColor } from "@/lib/category-colors"
 import { loadCustomCategoryColors } from "@/lib/custom-categories"
 import {
@@ -358,13 +359,20 @@ export function DataTable({
     }
   }, [onEditTransaction])
 
+  const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
+  const [transactionToDelete, setTransactionToDelete] = React.useState<z.infer<typeof schema> | null>(null)
+
   const handleDelete = React.useCallback((item: z.infer<typeof schema>) => {
-    if (window.confirm(`Tem certeza que deseja deletar a transação "${item.transaction}"?`)) {
-      if (onDeleteTransaction) {
-        onDeleteTransaction(item.id)
-      }
+    setTransactionToDelete(item)
+    setDeleteDialogOpen(true)
+  }, [])
+
+  const confirmDelete = React.useCallback(() => {
+    if (transactionToDelete && onDeleteTransaction) {
+      onDeleteTransaction(transactionToDelete.id)
     }
-  }, [onDeleteTransaction])
+    setTransactionToDelete(null)
+  }, [transactionToDelete, onDeleteTransaction])
 
   const columns = useColumns(handleEdit, handleDelete)
   const [data, setData] = React.useState(() => initialData)
@@ -433,6 +441,7 @@ export function DataTable({
   }
 
   return (
+    <>
     <Tabs
       defaultValue="outline"
       className="w-full flex-col justify-start gap-6"
@@ -653,6 +662,13 @@ export function DataTable({
         <div className="aspect-video w-full flex-1 rounded-lg border border-dashed"></div>
       </TabsContent>
     </Tabs>
+    <DeleteTransactionDialog
+      open={deleteDialogOpen}
+      onOpenChange={setDeleteDialogOpen}
+      transactionName={transactionToDelete?.transaction}
+      onConfirm={confirmDelete}
+    />
+  </>
   )
 }
 

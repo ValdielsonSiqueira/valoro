@@ -73,6 +73,7 @@ export function useTransactions() {
     const success = deleteTransaction(id)
     if (success) {
       setTransactions(prev => prev.filter(t => t.id !== id))
+      toast.success("Transação excluída com sucesso!")
     }
     return success
   }, [])

@@ -11,6 +11,7 @@ import {
 import { SectionCards } from "@/components/section-cards"
 import { SiteHeader } from "@/components/site-header"
 import { TransactionDrawer } from "@/components/transaction-drawer"
+import { DeleteTransactionDialog } from "@/components/delete-transaction-dialog"
 import { VisibilityProvider, useVisibility } from "@/contexts/visibility-context"
 import { useTransactions } from "@/hooks/use-transactions"
 import { Transaction } from "@/lib/transactions-service"
@@ -58,6 +59,8 @@ function DashboardContent() {
   const { isVisible } = useVisibility()
   const [isEditDrawerOpen, setIsEditDrawerOpen] = useState(false)
   const [editingTransaction, setEditingTransaction] = useState<Transaction | null>(null)
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [transactionToDelete, setTransactionToDelete] = useState<{ id?: string | number; category: string; amount: string; date: string | Date } | null>(null)
 
   const timelineTransactions = transactions.map(convertTransactionToTimeline)
 
@@ -70,9 +73,15 @@ function DashboardContent() {
   }
 
   const handleTimelineDelete = (timelineTransaction: { id?: string | number; category: string; amount: string; date: string | Date }) => {
-    if (timelineTransaction.id) {
-      removeTransaction(Number(timelineTransaction.id))
+    setTransactionToDelete(timelineTransaction)
+    setDeleteDialogOpen(true)
+  }
+
+  const confirmDelete = () => {
+    if (transactionToDelete?.id) {
+      removeTransaction(Number(transactionToDelete.id))
     }
+    setTransactionToDelete(null)
   }
 
   const handleEditConcluir = (data: {
@@ -186,6 +195,12 @@ function DashboardContent() {
                 }}
               />
             )}
+            <DeleteTransactionDialog
+              open={deleteDialogOpen}
+              onOpenChange={setDeleteDialogOpen}
+              transactionName={transactionToDelete ? `${transactionToDelete.category} - ${transactionToDelete.amount}` : undefined}
+              onConfirm={confirmDelete}
+            />
           </>
         )}
       </SidebarInset>
