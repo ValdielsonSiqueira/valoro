@@ -43,15 +43,9 @@ const transactionSchema = z.object({
     },
     { message: "O valor deve ser um número maior que zero" }
   ),
-  tipo: z.enum(["receita", "despesa"], {
-    required_error: "O tipo é obrigatório",
-    invalid_type_error: "O tipo é obrigatório",
-  }).refine((val) => val !== "", { message: "O tipo é obrigatório" }),
+  tipo: z.enum(["receita", "despesa"]),
   categoria: z.string().min(1, "A categoria é obrigatória"),
-  data: z.date({
-    required_error: "A data é obrigatória",
-    invalid_type_error: "A data é obrigatória",
-  }),
+  data: z.date(),
 })
 
 type TransactionFormData = z.infer<typeof transactionSchema>
@@ -435,8 +429,8 @@ export function TransactionDrawer({
                     }
                   }}
                   onBlur={() => setTouched((prev) => ({ ...prev, nome: true }))}
-                  aria-invalid={(touched.nome || errors.nome) && !!errors.nome}
-                  aria-describedby={touched.nome && errors.nome ? "nome-error" : undefined}
+                  aria-invalid={errors.nome ? true : undefined}
+                  aria-describedby={errors.nome ? "nome-error" : undefined}
                 />
                 {(touched.nome || errors.nome) && errors.nome && (
                   <span id="nome-error" className="text-sm text-destructive">
@@ -459,8 +453,8 @@ export function TransactionDrawer({
                     }
                   }}
                   onBlur={() => setTouched((prev) => ({ ...prev, valor: true }))}
-                  aria-invalid={(touched.valor || errors.valor) && !!errors.valor}
-                  aria-describedby={touched.valor && errors.valor ? "valor-error" : undefined}
+                  aria-invalid={errors.valor ? true : undefined}
+                  aria-describedby={errors.valor ? "valor-error" : undefined}
                 />
                 {(touched.valor || errors.valor) && errors.valor && (
                   <span id="valor-error" className="text-sm text-destructive">
@@ -486,8 +480,8 @@ export function TransactionDrawer({
                   <SelectTrigger 
                     id="tipo" 
                     className={`w-full ${(touched.tipo || errors.tipo) && errors.tipo ? '!border-destructive' : ''}`}
-                    aria-invalid={(touched.tipo || errors.tipo) && !!errors.tipo}
-                    aria-describedby={touched.tipo && errors.tipo ? "tipo-error" : undefined}
+                    aria-invalid={errors.tipo ? true : undefined}
+                    aria-describedby={errors.tipo ? "tipo-error" : undefined}
                   >
                     <SelectValue placeholder="Selecione o tipo" />
                   </SelectTrigger>

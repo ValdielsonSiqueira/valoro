@@ -240,7 +240,7 @@ export function ChartAreaInteractive({
               <ChartTooltip
                 cursor={false}
                 content={
-                  !isVisible ? null : (
+                  !isVisible ? undefined : (
                     <ChartTooltipContent
                       labelFormatter={(value) => {
                         return new Date(value).toLocaleDateString("pt-BR", {

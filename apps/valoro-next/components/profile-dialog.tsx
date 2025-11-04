@@ -138,8 +138,8 @@ export function ProfileDialog({
                   }
                 }}
                 onBlur={() => setTouched((prev) => ({ ...prev, name: true }))}
-                aria-invalid={(touched.name || errors.name) && !!errors.name}
-                aria-describedby={(touched.name || errors.name) && errors.name ? "name-error" : undefined}
+                aria-invalid={errors.name ? true : undefined}
+                aria-describedby={errors.name ? "name-error" : undefined}
               />
               {(touched.name || errors.name) && errors.name && (
                 <span id="name-error" className="text-sm text-destructive">
@@ -162,8 +162,8 @@ export function ProfileDialog({
                   }
                 }}
                 onBlur={() => setTouched((prev) => ({ ...prev, email: true }))}
-                aria-invalid={(touched.email || errors.email) && !!errors.email}
-                aria-describedby={(touched.email || errors.email) && errors.email ? "email-error" : undefined}
+                aria-invalid={errors.email ? true : undefined}
+                aria-describedby={errors.email ? "email-error" : undefined}
               />
               {(touched.email || errors.email) && errors.email && (
                 <span id="email-error" className="text-sm text-destructive">
@@ -186,8 +186,8 @@ export function ProfileDialog({
                   }
                 }}
                 onBlur={() => setTouched((prev) => ({ ...prev, avatar: true }))}
-                aria-invalid={(touched.avatar || errors.avatar) && !!errors.avatar}
-                aria-describedby={(touched.avatar || errors.avatar) && errors.avatar ? "avatar-error" : undefined}
+                aria-invalid={errors.avatar ? true : undefined}
+                aria-describedby={errors.avatar ? "avatar-error" : undefined}
               />
               {(touched.avatar || errors.avatar) && errors.avatar && (
                 <span id="avatar-error" className="text-sm text-destructive">
