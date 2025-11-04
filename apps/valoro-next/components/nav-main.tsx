@@ -97,6 +97,14 @@ export function NavMain({
                     block: "start",
                   })
                 }
+              } else if (item.title === "Extrato") {
+                const extratoElement = document.getElementById("extrato")
+                if (extratoElement) {
+                  extratoElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "start",
+                  })
+                }
               }
             }
 

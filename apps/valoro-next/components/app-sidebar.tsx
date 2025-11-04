@@ -86,7 +86,7 @@ export function AppSidebar({
         icon: IconListDetails,
       },
       {
-        title: "Investimentos",
+        title: "Extrato",
         url: "#",
         icon: IconChartBar,
       },
