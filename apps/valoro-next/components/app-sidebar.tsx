@@ -10,6 +10,7 @@ import {
   IconSettings,
 } from "@tabler/icons-react"
 
+import Image from "next/image"
 import { NavMain } from "@/components/nav-main"
 import { NavSecondary } from "@/components/nav-secondary"
 import { NavUser } from "@/components/nav-user"
@@ -119,7 +120,7 @@ export function AppSidebar({
               className="data-[slot=sidebar-menu-button]:!p-6"
             >
               <a href="#">
-                <img src={logoSrc} alt="Valoro" width={45} height={45} className="w-[45px] h-[45px]" />
+                <Image src={logoSrc} alt="Valoro" width={45} height={45} />
                 <span className="text-base font-semibold">Valoro</span>
               </a>
             </SidebarMenuButton>

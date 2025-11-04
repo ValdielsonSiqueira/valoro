@@ -180,7 +180,9 @@ dist/
 .cache/
 public/
 **/.cache/
-**/public/
+# Allow Next.js public directory
+!apps/valoro-next/public/
+!apps/valoro-next/public/**
 
 # SvelteKit
 .svelte-kit/

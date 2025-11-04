@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { useRouter } from "next/navigation"
 import { LoginForm } from "@valoro/ui"
 import { saveUserProfile } from "@/lib/user-service"
@@ -72,7 +73,7 @@ export default function LoginPage() {
       <div className="flex flex-col gap-4 p-6 md:p-10">
         <div className="flex justify-center md:justify-start">
           <Link href="/" className="flex items-center font-medium">
-              <img src="/logo-light.svg" alt="Logo" width={50} height={50} className="w-[50px] h-[50px]" />
+              <Image src="/logo-light.svg" alt="Logo" width={50} height={50} />
               <span className="text-xl font-bold">Valoro</span>
           </Link>
         </div>
@@ -94,10 +95,13 @@ export default function LoginPage() {
         </div>
       </div>
       <div className="bg-muted relative hidden lg:!block overflow-hidden min-h-full">
-        <img
+        <Image
           src="/placeholder.svg"
           alt="Imagem de login"
-          className="absolute inset-0 w-full h-full object-cover"
+          fill
+          className="object-cover"
+          priority
+          sizes="(max-width: 1024px) 0vw, 50vw"
         />
       </div>
     </div>
