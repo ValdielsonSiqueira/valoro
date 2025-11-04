@@ -174,6 +174,3 @@ export const Disabled: Story = { ... };
 - [@valoro/ui](../ui/README.md) - Pacote de componentes
 - [Valoro Monorepo](../../README.md) - Documentação principal do projeto
 
-## 📄 Licença
-
-Este pacote faz parte do monorepo Valoro e segue a mesma licença do projeto principal.

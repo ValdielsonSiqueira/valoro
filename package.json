@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev",
+    "dev": "turbo run dev --filter=valoro-next --filter=@valoro/docs",
     "lint": "turbo run lint",
     "storybook": "turbo run storybook",
     "build-storybook": "turbo run build-storybook",
