@@ -4,6 +4,9 @@ module.exports = {
   content: [
     './src/**/*.{ts,tsx}',
   ],
+  safelist: [
+    "gap-3"
+  ],
   theme: {
     extend: {
       colors: {

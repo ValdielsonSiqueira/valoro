@@ -6,7 +6,7 @@ import { resolve } from 'path'
 
 export default defineConfig(({ command }) => {
   const isDev = command === 'serve'
-  
+
   return {
     plugins: [
       react(),
@@ -31,11 +31,12 @@ export default defineConfig(({ command }) => {
         fileName: (format) => `index.${format}.js`,
       },
       rollupOptions: {
-        external: ['react', 'react-dom'],
+        external: ['react', 'react-dom', 'react/jsx-runtime'],
         output: {
           globals: {
             react: 'React',
             'react-dom': 'ReactDOM',
+            'react/jsx-runtime': 'react/jsx-runtime',
           },
         },
       },
