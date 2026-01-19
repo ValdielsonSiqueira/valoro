@@ -230,5 +230,20 @@ export { Timeline } from "./components/ui/timeline"
 // Contexts
 export { ThemeProvider, useTheme } from "./contexts/theme-context"
 
+// Accordion
+export {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from "./components/ui/accordion"
+
+// Progress
+export { Progress } from "./components/ui/progress"
+
+// Switch
+export { Switch } from "./components/ui/switch"
+
 // Utils
 export { cn } from "./lib/utils"
+
