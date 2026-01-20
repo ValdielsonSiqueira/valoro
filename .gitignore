@@ -187,3 +187,4 @@ public/
 # SvelteKit
 .svelte-kit/
 **/.svelte-kit/
+.npmrc
